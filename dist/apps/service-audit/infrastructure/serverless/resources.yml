@@ -1,0 +1,108 @@
+Resources:
+  PlatformAuditDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "PlatformAuditDLQ.fifo"
+      FifoQueue: true
+  PlatformAuditQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: platform-audit-queue-${opt:stage, self:provider.stage}.fifo
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt PlatformAuditDLQ.Arn
+        maxReceiveCount: 2
+
+  # Network App Subscription
+  PlatformAuditCitySNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformCitySNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+
+  PlatformAuditHubSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformHubSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+  
+  PlatformAuditHotelSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformHotelSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+  # # End Network App Subscription
+
+  # # Voucher App Subscription
+  PlatformAuditProgramSNSSubscription: 
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformVoucherProgramSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+
+  # PlatformAuditCodeSNSSubscription: 
+  #   Type: AWS::SNS::Subscription
+  #   Properties:
+  #     Protocol: sqs
+  #     TopicArn: !Ref PlatformVoucherCodeSNSTopicARN
+  #     Endpoint: !GetAtt PlatformAuditQueue.Arn
+  # # End Voucher App Subscription
+
+
+  # # Menu App Subscription
+
+  PlatformAuditCategorySNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformCategorySNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+
+  PlatformAuditModifierSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformModifierSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+
+  PlatformAuditProductSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformProductSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+
+  PlatformAuditMenuSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      TopicArn: !Ref PlatformMenuSNSTopicARN
+      Endpoint: !GetAtt PlatformAuditQueue.Arn
+  # # End Menu App Subscription
+
+  PlatformAuditQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref PlatformAuditQueue
+      PolicyDocument:
+        Id: PlatformAuditQueuePolicy
+        Version: "2012-10-17"
+        Statement:
+          - Sid: Allow-SNS-SendMessage
+            Effect: Allow
+            Action:
+              - sqs:*
+            Resource: !GetAtt PlatformAuditQueue.Arn
+            Principal: "*" # todo: fix this - don't allow to be open to everybody
+            # Principal:
+            #   AWS:
+            #     - 570502234248
+            #     - ${aws:accountId}
+            # Condition:
+            #   ArnEquals:
+            #     aws:SourceArn: !Ref OMSSNSTopicARN

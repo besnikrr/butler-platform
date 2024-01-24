@@ -1,0 +1,185 @@
+{
+  "paths": {
+    "/api/network/cities/{id}": {
+      "get": {
+        "tags": ["Cities"],
+        "operationId": "Get",
+        "description": "Get City by Id",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "allowReserved": true,
+              "style": "matrix",
+              "explode": true
+            },
+            "description": "ID of the city to be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/cityResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Cities"],
+        "operationId": "Patch",
+        "description": "Update City With ID",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the city to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Create New City",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/city"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/cityResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Cities"],
+        "operationId": "Delete",
+        "description": "Delete City by Id",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the city to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": { "result": { "type": "boolean" } }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    },
+    "/api/network/cities": {
+      "get": {
+        "tags": ["Cities"],
+        "operationId": "Get All",
+        "description": "Get All Cities",
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/cityResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Cities"],
+        "operationId": "Post",
+        "description": "Create New City",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Create New City",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cityResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/cityResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {}
+}

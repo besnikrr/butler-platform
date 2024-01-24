@@ -1,0 +1,47 @@
+Resources:
+  hotelOnCityUpdateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hotelOnCityUpdateDLQ.fifo"
+      FifoQueue: true
+  hotelOnCityUpdateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hotelOnCityUpdateQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - hotelOnCityUpdateDLQ
+            - Arn
+        maxReceiveCount: 3
+  hotelOnCityUpdateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkCity
+      Endpoint:
+        Fn::GetAtt:
+          - hotelOnCityUpdateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'CITY_UPDATED'
+      RawMessageDelivery: 'true'
+  hotelOnCityUpdateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt hotelOnCityUpdateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkCity
+      Queues:
+        - Ref: hotelOnCityUpdateQueue

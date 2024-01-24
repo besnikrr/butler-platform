@@ -1,0 +1,101 @@
+{
+  "root": "apps/infra-shared",
+  "sourceRoot": "apps/infra-shared",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/infra-shared",
+        "main": "apps/infra-shared/main.ts",
+        "tsConfig": "apps/infra-shared/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run infra-shared:base-build::production",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/infra-shared/resources ./dist/apps/infra-shared/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/infra-shared/package.json ./dist/apps/infra-shared/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/infra-shared/serverless.yml ./dist/apps/infra-shared/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/infra-shared/traits.yml ./dist/apps/infra-shared/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+
+    "deploy-infra": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/infra-shared",
+        "parallel": false
+      }
+    },
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/infra-shared",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy-infra": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run infra-shared:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-infra --stage {args.stage} --region {args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/infra-shared",
+        "parallel": false
+      }
+    }
+  }
+}

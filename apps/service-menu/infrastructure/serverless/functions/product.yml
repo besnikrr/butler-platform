@@ -1,0 +1,227 @@
+getPresignURL:
+  permissionName: CAN_GET_PRESIGNED_URL
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/upload/presign-url
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItem:
+  permissionName: CAN_GET_ITEM
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemRelations:
+  permissionName: CAN_GET_ITEM_RELATIONS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}/relations
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemsBySubcategory:
+  permissionName: CAN_GET_ITEMS_BY_SUBCATEGORY
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/subcategory/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemsByCategory:
+  permissionName: CAN_GET_ITEMS_BY_CATEGORY
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/category/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createItem:
+  permissionName: CAN_CREATE_ITEM
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateItem:
+  permissionName: CAN_UPDATE_ITEM
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/type/{type}/{id}
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+changeProductStatus:
+  permissionName: CAN_CHANGE_ITEM_STATUS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/products/batch-edit-status
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getCategorizedItems:
+  permissionName: CAN_GET_CATEGORIZED_ITEMS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/category-subcategories/subcategories
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteItem:
+  permissionName: CAN_DELETE_ITEM
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItems:
+  permissionName: CAN_GET_ITEMS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createItem86:
+  permissionName: CAN_CREATE_ITEM_86
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}/out-of-stock
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItem86:
+  permissionName: CAN_GET_ITEM_86
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}/out-of-stock
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getUpdateItem86:
+  permissionName: CAN_UPDATE_ITEM_86
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}/item86/edit
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+cronItem86:
+  permissionName: CAN_CRON_ITEM_86
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/products/{id}/item86/cron
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+returnProductsBackInStock:
+  handler: main.returnProductsBackInStock
+  timeout: 30
+  events:
+    - schedule: rate(5 minutes)

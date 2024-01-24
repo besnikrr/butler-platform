@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "sns",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "description": "Service",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "entity": {
+      "type": "string",
+      "description": "Entity name for which you want to add the SNS topic",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["service", "entity"]
+}

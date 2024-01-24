@@ -1,0 +1,32 @@
+Resources:
+  ServiceMenuModifierTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_MENU_MODIFIER_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceMenuModifierTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceMenuModifierTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceMenuModifierTopic
+
+Outputs:
+  ServiceMenuModifierTopicArn:
+    Value: !Ref ServiceMenuModifierTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceMenuModifierTopic

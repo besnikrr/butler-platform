@@ -1,0 +1,50 @@
+Resources:
+  voucherHotelOnMenuAssignActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherHotelOnMenuAssignActionDLQ.fifo"
+      FifoQueue: true
+  voucherHotelOnMenuAssignActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherHotelOnMenuAssignActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt voucherHotelOnMenuAssignActionDLQ.Arn
+        maxReceiveCount: 3
+  voucherHotelOnMenuAssignActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceMenuMenuTopic
+      Endpoint: !GetAtt voucherHotelOnMenuAssignActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "MENU_HOTELS_ASSIGNED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  voucherHotelOnMenuAssignActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt voucherHotelOnMenuAssignActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceMenuMenuTopic
+      Queues:
+        - Ref: voucherHotelOnMenuAssignActionQueue
+
+Outputs:
+  voucherHotelOnMenuAssignActionQueueArn:
+    Value: !GetAtt voucherHotelOnMenuAssignActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-voucherHotelOnMenuAssignActionQueue

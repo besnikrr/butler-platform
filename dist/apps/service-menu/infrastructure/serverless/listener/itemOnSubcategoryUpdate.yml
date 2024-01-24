@@ -1,0 +1,9 @@
+itemOnSubcategoryUpdate:
+  handler: main.itemOnSubcategoryUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - itemOnSubcategoryUpdateQueue
+            - Arn

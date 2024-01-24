@@ -1,0 +1,195 @@
+getMenus:
+  permissionName: CAN_GET_MENUS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getMenuById:
+  permissionName: CAN_GET_SINGLE_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createMenu:
+  permissionName: CAN_CREATE_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateMenu:
+  permissionName: CAN_UPDATE_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+duplicateMenu:
+  permissionName: CAN_DUPLICATE_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/duplicate/{id}
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteMenu:
+  permissionName: CAN_DELETE_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+batchEditMenu:
+  permissionName: CAN_BATCH_EDIT_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/batch-edit
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getMenuHotels:
+  permissionName: CAN_GET_MENU_HOTELS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/hotels
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getMenuByHotelId:
+  permissionName: CAN_GET_HOTEL_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/hotel/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+assignMenu:
+  permissionName: CAN_ASSIGN_MENU
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/hotels
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getMenuHotelRelations:
+  permissionName: CAN_GET_MENU_HOTEL_RELATIONS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/hotel/relations/cities
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getCityHubHotelRelations:
+  permissionName: CAN_GET_MENU_HOTEL_CITY_RELATIONS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/hotel/relations/hubs/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+pushMenuToProduction:
+  permissionName: CAN_PUSH_MENU_TO_PRODUCTION
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/push-production
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

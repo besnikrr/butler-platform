@@ -1,0 +1,90 @@
+getPermissiongroup:
+  permissionName: CAN_GET_SINGLE_PERMISSION_GROUP
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/permissiongroups/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+listPermissiongroups:
+  permissionName: CAN_LIST_PERMISSION_GROUPS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/permissiongroups
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+createPermissiongroup:
+  permissionName: CAN_CREATE_PERMISSION_GROUP
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/permissiongroups
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+updatePermissiongroup:
+  permissionName: CAN_UPDATE_PERMISSION_GROUP
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/permissiongroups/{id}
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+removePermissiongroup:
+  permissionName: CAN_DELETE_PERMISSION_GROUP
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/permissiongroups/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live

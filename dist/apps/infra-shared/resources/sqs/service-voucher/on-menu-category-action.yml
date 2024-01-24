@@ -1,0 +1,52 @@
+Resources:
+  voucherCategoryOnMenuCategoryActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherCategoryOnMenuCategoryActionDLQ.fifo"
+      FifoQueue: true
+  voucherCategoryOnMenuCategoryActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherCategoryOnMenuCategoryActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt voucherCategoryOnMenuCategoryActionDLQ.Arn
+        maxReceiveCount: 3
+  voucherCategoryOnMenuCategoryActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceMenuCategoryTopic
+      Endpoint: !GetAtt voucherCategoryOnMenuCategoryActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "CATEGORY_CREATED"
+          - "CATEGORY_UPDATED"
+          - "CATEGORY_DELETED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  voucherCategoryOnMenuCategoryActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt voucherCategoryOnMenuCategoryActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceMenuCategoryTopic
+      Queues:
+        - Ref: voucherCategoryOnMenuCategoryActionQueue
+
+Outputs:
+  voucherCategoryOnMenuCategoryActionQueueArn:
+    Value: !GetAtt voucherCategoryOnMenuCategoryActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-voucherCategoryOnMenuCategoryActionQueue

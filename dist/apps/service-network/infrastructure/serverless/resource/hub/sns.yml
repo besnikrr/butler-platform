@@ -1,0 +1,6 @@
+Resources:
+  ServiceNetworkHub:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: ServiceNetworkHub-${self:provider.stage}.fifo
+      FifoTopic: true

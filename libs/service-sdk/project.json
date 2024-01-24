@@ -1,0 +1,55 @@
+{
+  "root": "libs/service-sdk",
+  "sourceRoot": "libs/service-sdk",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/service-sdk",
+        "tsConfig": "libs/service-sdk/tsconfig.lib.json",
+        "packageJson": "libs/service-sdk/package.json",
+        "main": "libs/service-sdk/index.ts",
+        "assets": [
+          "libs/service-sdk/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/service-sdk/**/*.ts"
+        ]
+      }
+    },
+    "test-local": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/libs/service-sdk"
+      ],
+      "options": {
+        "jestConfig": "libs/service-sdk/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/service-sdk"
+      ],
+      "options": {
+        "jestConfig": "libs/service-sdk/jest.config.js",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    }
+  },
+  "tags": []
+}

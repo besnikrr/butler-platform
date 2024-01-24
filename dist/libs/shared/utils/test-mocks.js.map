@@ -1,0 +1,1 @@
+{"version":3,"file":"test-mocks.js","sourceRoot":"","sources":["../../../../libs/shared/utils/test-mocks.ts"],"names":[],"mappings":";;;AAEa,QAAA,YAAY,GAAY;IACnC,EAAE,EAAE,CAAC;IACL,OAAO,EAAE;QACP,MAAM,EAAE,qBAAqB;QAC7B,QAAQ,EAAE,4BAA4B;KACvC;IACD,MAAM,EAAE,kCAAkC;IAC1C,IAAI,EAAE,EAAE;IACR,IAAI,EAAE,eAAe;IACrB,gBAAgB,EAAE,WAAW;CAC9B,CAAC"}

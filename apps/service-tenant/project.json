@@ -1,0 +1,199 @@
+{
+  "root": "apps/service-tenant",
+  "sourceRoot": "apps/service-tenant",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/service-tenant",
+        "main": "apps/service-tenant/src/main.ts",
+        "tsConfig": "apps/service-tenant/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/service-tenant/src/environments/environment.ts",
+              "with": "apps/service-tenant/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-tenant:base-build::production",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-tenant/infrastructure ./dist/apps/service-tenant/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-tenant/serverless.yml ./dist/apps/service-tenant/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-tenant/traits.yml ./dist/apps/service-tenant/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-tenant",
+        "parallel": false
+      },
+      "configurations": {
+        "function-only": {
+          "commands": [
+            {
+              "command": "npm install",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "sls deploy function --function {args.function} --stage={args.stage} --region={args.region} --force",
+              "forwardAllArgs": false
+            }
+          ]
+        }
+      }
+    },
+    "base-serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "service-tenant:base-build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx base-serve service-tenant --port 9228",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false,
+        "cwd": "./"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/service-tenant/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/service-tenant"],
+      "options": {
+        "jestConfig": "apps/service-tenant/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "migrate-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["sls dynamodb migrate", "sls dynamodb seed"],
+        "cwd": "apps/service-tenant",
+        "parallel": false
+      }
+    },
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-tenant",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-tenant:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-tenant",
+        "parallel": false
+      }
+    },
+    "pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-tenant/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-test --stage={args.stage} --traits-input-file ./apps/service-tenant/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-tenant",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

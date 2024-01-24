@@ -1,0 +1,6 @@
+voucherCategoryOnMenuCategoryAction:
+  handler: main.voucherCategoryOnMenuCategoryAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.voucherCategoryOnMenuCategoryActionQueue}

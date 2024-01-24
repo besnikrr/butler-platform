@@ -1,0 +1,109 @@
+service: iam
+
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    description: Some Description of deployment history
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    ServiceIamUserTopic: ${self:custom.ext-config.ServiceIamUserTopic}
+    STAGE: ${self:provider.stage, 'dev'}
+    REGION:  ${self:provider.region, 'us-east-1'}
+    DB: service_iam
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+    DOMAIN_NAME: "https://butler.butlerplatform.com"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+        - cognito-idp:*
+        - sns:*
+        - sqs:*
+        - states:*
+        - lambda:InvokeFunction
+        - secretsmanager:GetSecretValue
+      Resource: "*"
+plugins:
+  - "@butlerhospitality/sfsp-plugin"
+  - serverless-pseudo-parameters
+  - serverless-plugin-canary-deployments
+  - serverless-prune-plugin
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-warmup
+  - serverless-plugin-split-stacks
+  
+custom:
+  ext-config:
+    ServiceIamUserTopic: !ImportValue ${self:provider.stage}-ext-ServiceIamUserTopic
+    AfterDeployTopic: arn:aws:sns:${self:provider.region}:${self:custom.accountId}:AFTER_DEPLOY_TOPIC
+  warmup:
+    default:
+      enabled: false
+  splitStacks:
+    nestedStackCount: 30
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  AFTER_DEPLOY_TOPIC: ${self:custom.ext-config.AfterDeployTopic}
+  prune:
+    automatic: true
+    number: 3
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets?
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway5xxError
+      - apiGateway4xxError
+  accountId: ${self:custom.secrets.account_id}
+  app-definition:
+    name: "Identity and access management"
+    description: "Manage users and roles across all services"
+    dashboard-settings:
+      color: "#FFE1A8"
+      icon: "User"
+      iconColor: "#000000"
+      path: "iam"
+      title: "Users & Roles"
+
+resources: {}
+
+functions:
+  - ${file(./infrastructure/serverless/function/role.yml)}
+  - ${file(./infrastructure/serverless/function/user.yml)}
+  - ${file(./infrastructure/serverless/function/permissiongroup.yml)}
+  - ${file(./infrastructure/serverless/function/app.yml)}
+  - ${file(./infrastructure/serverless/function/migration.yml)}

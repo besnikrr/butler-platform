@@ -1,0 +1,9 @@
+cityOnHubCreate:
+  handler: main.cityOnHubCreate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - cityOnHubCreateQueue
+            - Arn

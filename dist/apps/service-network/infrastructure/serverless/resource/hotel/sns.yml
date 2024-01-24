@@ -1,0 +1,6 @@
+Resources:
+  ServiceNetworkHotel:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: ServiceNetworkHotel-${self:provider.stage}.fifo
+      FifoTopic: true

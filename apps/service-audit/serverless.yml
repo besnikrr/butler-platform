@@ -1,0 +1,50 @@
+service: audit
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    STAGE: ${self:provider.stage, 'local'}
+    REGION: ${self:provider.region, 'us-east-1'}
+    DB: service_audit
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - sns:*
+        - sqs:*
+        - states:*
+        - secretsmanager:*
+      Resource: "*"
+
+plugins:
+  - serverless-offline
+  #- serverless-plugin-datadog
+
+custom:
+  #datadog:
+    #site: ${self:custom.secrets.datadog_site, "datadoghq.com"}
+    #apiKey: ${self:custom.secrets.datadog_apikey, "default"}
+
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  accountId: ${self:custom.secrets.account_id}
+  ext-config:
+    ServiceNetworkHotelTopic: !ImportValue ${self:provider.stage}-ext-ServiceNetworkHotelTopic
+    ServiceNetworkHubTopic: !ImportValue ${self:provider.stage}-ext-ServiceNetworkHubTopic
+    ServiceMenuCategoryTopic: !ImportValue ${self:provider.stage}-ext-ServiceMenuCategoryTopic
+
+functions:
+  - ${file(./infrastructure/serverless/functions/log.yml)}
+  - ${file(./infrastructure/serverless/functions/migrations.yml)}
+
+resources:
+  - ${file(./infrastructure/serverless/resources.yml)}
+  - ${file(./infrastructure/serverless/parameters.yml)}

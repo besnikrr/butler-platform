@@ -1,0 +1,61 @@
+{
+  "definitions": {
+    "cityResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "created_by": {
+          "type": "object",
+          "properties": {
+            "sk": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "number"
+            },
+            "pk": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "country": {
+          "type": "string"
+        },
+        "time_zone": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "created_by_id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+

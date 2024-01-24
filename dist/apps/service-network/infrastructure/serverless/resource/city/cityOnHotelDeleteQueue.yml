@@ -1,0 +1,47 @@
+Resources:
+  cityOnHotelDeleteDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHotelDeleteDLQ.fifo"
+      FifoQueue: true
+  cityOnHotelDeleteQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHotelDeleteQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - cityOnHotelDeleteDLQ
+            - Arn
+        maxReceiveCount: 3
+  cityOnHotelDeleteSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHotel
+      Endpoint:
+        Fn::GetAtt:
+          - cityOnHotelDeleteQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HOTEL_DELETED'
+      RawMessageDelivery: 'true'
+  cityOnHotelDeleteQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt cityOnHotelDeleteQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHotel
+      Queues:
+        - Ref: cityOnHotelDeleteQueue

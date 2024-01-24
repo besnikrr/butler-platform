@@ -1,0 +1,15 @@
+{
+  "name": "infra-shared",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "aws-lambda": "^1.0.6",
+    "pg": "^8.7.1",
+    "tslib": "^2.0.0"
+  },
+  "engines": {
+    "node": "^14.13.0",
+    "npm": "^6.14.8"
+  }
+}

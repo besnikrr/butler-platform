@@ -1,0 +1,18 @@
+generateVouchersPDF:
+  name: generateVouchersPDF
+  definition:
+    Comment: "Generates vouchers, generates pdf and sends the pdf to email"
+    StartAt: generate-vouchers
+    States:
+      generate-vouchers:
+        Type: Task
+        Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${opt:stage}-generateVouchersState"
+        Next: generate-pdf
+      generate-pdf:
+        Type: Task
+        Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${opt:stage}-generatePDFState"
+        Next: send-email
+      send-email:
+        Type: Task
+        Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${opt:stage}-sendEmailState"
+        End: true

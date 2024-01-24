@@ -1,0 +1,245 @@
+[
+  {
+    "pk": "program",
+    "sk": "program::lunch_discount_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs1pk": "program::hotel",
+    "gs1sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs2pk": "program::type",
+    "created_at": 1638353271261,
+    "gs2sk": "DISCOUNT",
+    "name": "Lunch Discount Voucher",
+    "type": "DISCOUNT",
+    "is_active": true,
+    "code_limit": 10,
+    "notes": "Some notes",
+    "payer": "BUTLER",
+    "payer_percentage": 100,
+    "amount": 10,
+    "payment_type": "AMOUNT",
+    "hotel": {
+      "id": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "HotelThree",
+      "code": "123"
+    }
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1#program::lunch_discount_voucher#code::U45123",
+    "type": "VOUCHER-CODE",
+    "code": "U45123",
+    "claimed_date": null,
+    "expiry_date": null,
+    "created_at": 1638353271261,
+    "status": "PENDING",
+    "program": {
+      "id": "program::lunch_discount_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "Lunch Discount Voucher",
+      "type": "DISCOUNT"
+    }
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1#program::lunch_discount_voucher#code::U11223",
+    "type": "VOUCHER-CODE",
+    "code": "U11223",
+    "claimed_date": null,
+    "expiry_date": null,
+    "created_at": 1638353271261,
+    "status": "PENDING",
+    "program": {
+      "id": "program::lunch_discount_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "Lunch Discount Voucher",
+      "type": "DISCOUNT"
+    }
+  },
+  {
+    "pk": "program",
+    "sk": "program::interesting_perdiem_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs1pk": "program::hotel",
+    "gs1sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs2pk": "program::type",
+    "created_at": 1638353271261,
+    "gs2sk": "PER_DIEM",
+    "name": "Interesting Perdiem Voucher",
+    "type": "PER_DIEM",
+    "is_active": true,
+    "code_limit": 10,
+    "notes": "Some notes",
+    "payer": "BUTLER",
+    "payer_percentage": 100,
+    "amount": 10,
+    "hotel": {
+      "id": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "HotelThree",
+      "code": "123"
+    }
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1#program::interesting_perdiem_voucher#code::A23231",
+    "type": "VOUCHER-CODE",
+    "code": "A23231",
+    "claimed_date": null,
+    "expiry_date": null,
+    "created_at": 1638353271261,
+    "status": "PENDING",
+    "program": {
+      "id": "program::interesting_perdiem_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "Interesting Perdiem Voucher",
+      "type": "PER_DIEM"
+    }
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1#program::interesting_perdiem_voucher#code::A23222",
+    "type": "VOUCHER-CODE",
+    "code": "A23222",
+    "claimed_date": null,
+    "expiry_date": null,
+    "created_at": 1638353271261,
+    "status": "PENDING",
+    "program": {
+      "id": "program::interesting_perdiem_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "Interesting Perdiem Voucher",
+      "type": "PER_DIEM"
+    }
+  },
+  {
+    "pk": "program",
+    "sk": "program::weird_prefixe_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs1pk": "program::hotel",
+    "gs1sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "gs2pk": "program::type",
+    "created_at": 1638353271261,
+    "gs2sk": "PRE_FIXE",
+    "name": "Weird Prefixe Voucher",
+    "type": "PRE_FIXE",
+    "is_active": true,
+    "code_limit": 10,
+    "notes": "Some notes",
+    "payer": "BUTLER",
+    "payer_percentage": 100,
+    "amount": 10,
+    "rules": {
+      "category::14c08052-171c-4c7c-a702-5833987a60e7": {
+        "name": "Breakfast",
+        "configs": [
+          {
+            "subcategories": {
+              "subcategory::01d0da70-94c8-4ffb-9166-d1f53d1397df": "Sandwiches",
+              "subcategory::3a2002ee-b00b-422c-8565-855c87e8a67c": "Starters"
+            },
+            "quantity": 2,
+            "price_limit": 10
+          },
+          {
+            "subcategories": {
+              "subcategory::3a2002ee-b00b-422c-8565-855c87e8a67c": "Starters"
+            },
+            "quantity": 1,
+            "price_limit": 15
+          }
+        ]
+      }
+    },
+    "hotel": {
+      "id": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "HotelThree",
+      "code": "123"
+    }
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1#program::weird_prefixe_voucher#code::B11332",
+    "type": "VOUCHER-CODE",
+    "code": "B11332",
+    "claimed_date": null,
+    "expiry_date": null,
+    "created_at": 1638353271261,
+    "status": "PENDING",
+    "program": {
+      "id": "program::weird_prefixe_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "Weird Prefixe Voucher",
+      "type": "PRE_FIXE"
+    }
+  },
+  {
+    "pk": "subcategory-program",
+    "sk": "subcategory::01d0da70-94c8-4ffb-9166-d1f53d1397df",
+    "programs": {
+      "program::weird_prefixe_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1": true
+    }
+  },
+  {
+    "pk": "subcategory-program",
+    "sk": "subcategory::3a2002ee-b00b-422c-8565-855c87e8a67c",
+    "programs": {
+      "program::weird_prefixe_voucher#hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1": true
+    }
+  },
+  {
+    "pk": "hotel-program",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "hotel": {
+      "id": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+      "name": "HotelThree",
+      "code": "123"
+    },
+    "program_types": [
+      "DISCOUNT",
+      "PER_DIEM",
+      "PRE_FIXE"
+    ],
+    "nr_programs": 3
+  },
+  {
+    "pk": "hotel-program",
+    "sk": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+    "hotel": {
+      "name": "HotelOne",
+      "id": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+      "code": "hotelcodeone"
+    },
+    "program_types": [
+      "DISCOUNT"
+    ],
+    "nr_programs": 1
+  },
+  {
+    "gs1pk": "program::hotel",
+    "gs2pk": "program::type",
+    "amount": 10,
+    "is_active": true,
+    "notes": "Some notes",
+    "payer_percentage": 100,
+    "type": "DISCOUNT",
+    "payer": "BUTLER",
+    "payment_type": "AMOUNT",
+    "code_limit": 10,
+    "sk": "program::liburna_discount_voucher#hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+    "name": "Liburna Voucher",
+    "hotel": {
+      "name": "HotelOne",
+      "id": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+      "code": "hotelcodeone"
+    },
+    "pk": "program",
+    "gs1sk": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+    "gs2sk": "DISCOUNT"
+  },
+  {
+    "pk": "code",
+    "sk": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9#program::liburna_discount_voucher#code::YD12DN",
+    "created_at": 1638353271261,
+    "type": "VOUCHER-CODE",
+    "code": "YD12DN",
+    "claimed_date": null,
+    "expiry_date": null,
+    "status": "PENDING",
+    "program": {
+      "id": "program::liburna_discount_voucher#hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+      "name": "Liburna Voucher",
+      "type": "DISCOUNT"
+    }
+  }
+]

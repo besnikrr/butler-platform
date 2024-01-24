@@ -1,0 +1,47 @@
+Resources:
+  hubOnCityUpdateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hubOnCityUpdateDLQ.fifo"
+      FifoQueue: true
+  hubOnCityUpdateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hubOnCityUpdateQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - hubOnCityUpdateDLQ
+            - Arn
+        maxReceiveCount: 3
+  hubOnCityUpdateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkCity
+      Endpoint:
+        Fn::GetAtt:
+          - hubOnCityUpdateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'CITY_UPDATED'
+      RawMessageDelivery: 'true'
+  hubOnCityUpdateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt hubOnCityUpdateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkCity
+      Queues:
+        - Ref: hubOnCityUpdateQueue

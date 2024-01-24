@@ -1,0 +1,38 @@
+type: EXPRESS
+name: createHotelSF-${self:provider.environment.STAGE}
+definition:
+  Comment: "Create Hotel Step Function"
+  StartAt: validateData
+  States:
+    validateData:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-validateData
+      Next: provisionPhoneNumber
+    provisionPhoneNumber:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-provisionPhoneNumber
+      Next: updateSmsUrl
+    updateSmsUrl:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-updateSmsUrl
+      Next: validateRoomNumbers
+    validateRoomNumbers:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-validateRoomNumbers
+      Next: saveHotel
+    saveHotel:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-saveHotel
+      Next: createQuickBooksAccount
+    # addPartnerUser:
+    #   Type: Task
+    #   Resource: ${self:provider.environment.HOTEL_PARTNERS_LAMBDA_ARN}
+    #   OutputPath: "$"
+    #   Parameters:
+    #     context.$: "$.context"
+    #     input.$: "$.input"
+    #   Next: createQuickBooksAccount
+    createQuickBooksAccount:
+      Type: Task
+      Resource: ${self:provider.environment.RESOURCE_PREFIX}-createQuickBooksAccount
+      End: true

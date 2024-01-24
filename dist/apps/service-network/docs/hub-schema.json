@@ -1,0 +1,169 @@
+{
+  "definitions": {
+    "hubResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "city_id": {
+          "type": "string"
+        },
+        "city": {
+          "$ref": "#/definitions/city"
+        },
+        "address": {
+          "$ref": "#/definitions/address"
+        },
+        "primary_contact": {
+          "$ref": "#/definitions/primary_contact"
+        },
+        "active": {
+          "type": "boolean",
+          "required": "true"
+        },
+        "tax": {
+          "$ref": "#/definitions/tax"
+        },
+        "coordinates": {
+          "$ref": "#/definitions/coordinates"
+        },
+        "integration_configs": {
+          "$ref": "#/definitions/integration_configs"
+        },
+        "expeditor_app": {
+          "$ref": "#/definitions/expeditor_app"
+        },
+        "next_move_app": {
+          "$ref": "#/definitions/next_move_app"
+        }
+      }
+    },
+    "city": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "required": true,
+          "type": "string"
+        },
+        "country": {
+          "required": true,
+          "type": "string"
+        },
+        "line1": {
+          "required": true,
+          "type": "string"
+        },
+        "line2": {
+          "required": true,
+          "type": "string"
+        },
+        "zip_code": {
+          "required": true,
+          "type": "number"
+        },
+        "state": {
+          "required": true,
+          "type": "string"
+        }
+      }
+    },
+    "primary_contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "required": true,
+          "type": "boolean"
+        },
+        "phone": {
+          "required": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "tax": {
+      "type": "object",
+      "properties": {
+        "percentage": {
+          "type": "number",
+          "required": true
+        }
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "required": true
+        },
+        "longitude": {
+          "type": "number",
+          "required": true
+        }
+      }
+    },
+    "integration_configs": {
+      "type": "object",
+      "properties": {
+        "pms": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "activities_app": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "shuttle_app": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "expeditor_app": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "next_move_app": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

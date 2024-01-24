@@ -1,0 +1,36 @@
+[
+  {
+    "cognito": {
+      "poolId": "us-east-1_Tq29inz5l",
+      "clientId": "7nn3c7l878r6t3vh4mh92ubpl2"
+    },
+    "createdAt": 1626131034245,
+    "sk": "tenant::butler",
+    "name": "Butler Tenant",
+    "awsDefaultRegion": "us-east-1",
+    "pk": "tenant",
+    "id": "butler",
+    "assignedApps": [],
+    "status": "CREATED",
+    "jwks": {
+      "keys": [
+        {
+          "kty": "RSA",
+          "alg": "RS256",
+          "e": "AQAB",
+          "n": "rZarF5SgV7Mru-bjatgOEqkpPPtKByb6DsbIocqZeP0X9LmyVmfzR_1mrs2Jex_CNU3Pmr2d-GT3HInawqWjdl3r0w-f1Vc0okJLu_GLDeRo_PpS110IsOh7kVN3tFIwoc9yc7V8HMNafSD01W1DguEySbcT4c2D9D5fczdJ6MI7WxXkhE8j6XsA7q8fee9DZ_MhUmKrq-wMXC3QtdPLmSwrWkwo9ZG4HVg5b2B1EN5b-HwZAtyAeM7vxfDtQchAy0YXHgBCOJ40zatpAMrTeKFTYcUL9o-VS_qir-DSzZxURGDZmNUQSsKF94PknXnhExFpaaDumWiP_-rd5uj4vw",
+          "use": "sig",
+          "kid": "5YlnNGxAFWTvHX7ZXV3RWFK4oXwRDp7kWLamZv7za08="
+        },
+        {
+          "kty": "RSA",
+          "alg": "RS256",
+          "e": "AQAB",
+          "n": "wWbTznD8g9M6ASF-JSzjdWF-O0Y6uiC7Cte0RifVNfe0ZgdEb5emvcryDrMhYKdWKcBEl4CvIRBL09b8LhJZZ2ONmM5So-GnmwBUuj5VPb96KdCy8SxQWqNdmY7EbYPT_Wag5Ay8cA8JBlc6J9lN53luHc5hONcvJy79UdJJBh1s_8e6XusUcUVLUzQZ5ms7GpPY5wg0n6iavRQLHx_1ZUYWBdSgkoW11BEhFD9BpM0oO0YKg1F9oeBZ1UZKobUfGHRt5jTW5ARRDhrAbvKpzEYeQ8aj7mTX1-QyJEXNvUFQXw8L5P7r1I-YAthlD6qtSgzy1BViPidPJ_vVkVPLMw",
+          "use": "sig",
+          "kid": "Ps20amm3Q+gjHdVdt933tDzZkuM0djcClA+rgXyG3X4="
+        }
+      ]
+    }
+  }
+]

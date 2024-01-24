@@ -1,0 +1,19 @@
+saveImage:
+  warmup: true
+  handler: main.saveImage
+  alarms: # override base alarms
+    - name: functionTimeout
+      threshold: 6000
+imageSaveSuccess:
+  warmup: true
+  handler: main.imageSaveSuccess
+  alarms: # override base alarms
+    - name: functionTimeout
+      threshold: 6000
+imageSaveError:
+  warmup: true
+  handler: main.imageSaveError
+  alarms: # override base alarms
+    - name: functionTimeout
+      threshold: 6000
+  

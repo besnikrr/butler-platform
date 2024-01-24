@@ -1,0 +1,9 @@
+menuOnModifierUpdate:
+  handler: main.menuOnModifierUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - menuOnModifierUpdateQueue
+            - Arn

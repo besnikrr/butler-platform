@@ -1,0 +1,12 @@
+getAllHotelPrograms:
+  permissionName: CAN_GET_HOTELS_WITH_VOUCHERS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotel-programs
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

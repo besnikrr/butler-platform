@@ -1,0 +1,20 @@
+up:
+  handler: main.up
+  timeout: 300
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+down:
+  handler: main.down
+  timeout: 300
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}

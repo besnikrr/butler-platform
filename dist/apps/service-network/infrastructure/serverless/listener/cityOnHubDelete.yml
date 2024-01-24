@@ -1,0 +1,9 @@
+cityOnHubDelete:
+  handler: main.cityOnHubDelete
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - cityOnHubDeleteQueue
+            - Arn

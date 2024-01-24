@@ -1,0 +1,52 @@
+service: dashboard
+provider:
+  name: 'aws'
+  runtime: nodejs12.x
+  stage: ${opt:stage, "local"}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    description: Some Description of deployment history
+  environment:
+    STAGE: ${self:provider.stage}
+    TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - cognito-idp:*
+        - states:*
+      Resource: '*'
+plugins:
+  - "@butlerhospitality/sfsp-plugin"
+  - serverless-pseudo-parameters
+  - serverless-dynamodb-local
+custom:
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  accountId: ${self:custom.secrets.account_id}
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  app-definition:
+    name: 'Dashboard management'
+    description: 'Manage apps'
+    dashboard-settings:
+      color: '#7B61FF'
+      icon: 'Dashboard'
+      path: ''
+      title: 'Dashboard'
+  dynamodb:
+    start:
+      migrate: true
+      port: 8000
+    stages:
+      - local
+    seed:
+      local:
+        sources:
+          - table: ${self:provider.environment.TABLE_MAIN}-${self:provider.environment.STAGE}-butler
+            sources: [./infrastructure/seed/seed.json]
+
+functions:
+  - ${file(./infrastructure/serverless/function/user-apps.yml)}
+resources:
+  Resources:

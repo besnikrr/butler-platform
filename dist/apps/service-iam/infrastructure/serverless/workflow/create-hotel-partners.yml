@@ -1,0 +1,48 @@
+type: EXPRESS
+name: "CreateHotelPartnersSF"
+definition:
+  Comment: "Create Hotel Partners Step Function"
+  StartAt: validate-input
+  States:
+    validate-input:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateHotelPartnersInput"
+      Next: transform-data-for-synchronization
+    transform-data-for-synchronization:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-transformDataForSynchronization"
+      Next: is-valid
+    is-valid:
+      Type: Choice
+      Choices:
+        - Or:
+            - Variable: "$.input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - And:
+            - Variable: $.input.isValid
+              BooleanEquals: true
+          Next: synchronize-users
+    synchronize-users:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-syncHotelPartnersInDynamodbAndCognito"
+      Next: is-sync-success
+    is-sync-success:
+      Type: Choice
+      Choices:
+        - Or:
+            - Variable: "$.input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - And:
+            - Variable: $.input.isValid
+              BooleanEquals: true
+          Next: send-success-response
+    send-success-response:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendSuccessResponseForHotelPartners"
+      End: true
+    send-err-message:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendErrMessage"
+      End: true

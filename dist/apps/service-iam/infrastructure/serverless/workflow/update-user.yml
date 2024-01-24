@@ -1,0 +1,108 @@
+type: EXPRESS
+name: 'UpdateUserSF'
+definition:
+  Comment: 'Update User Step Function'
+  StartAt: validation-state
+  States:
+    validation-state:
+      Type: Parallel
+      Next: is-valid
+      Branches:
+      - StartAt: validate-input
+        States:
+          validate-input:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateUpdateUserInput"
+            End: true
+      - StartAt: validate-does-not-exist
+        States:
+          validate-does-not-exist:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateUserExists"
+            End: true
+      - StartAt: validate-roles
+        States:
+          validate-roles:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateRoles"
+            End: true
+      - StartAt: validate-exist-in-cognito
+        States:
+          validate-exist-in-cognito:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateUserExistsInCognito"
+            End: true
+    is-valid:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[2].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[3].input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: $[0].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[1].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[2].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: "$[3].input.isValid"
+              BooleanEquals: true
+          Next: transform-data
+    transform-data:
+      Type: Pass
+      Parameters:
+        -
+          context.$: $[0].context
+          input.$: $[0].input
+      OutputPath: "$[0]"
+      Next: insert-parallel
+    insert-parallel:
+      Type: Parallel
+      Next: is-save-success
+      Branches:
+      - StartAt: update-in-dynamo
+        States:
+          update-in-dynamo:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-updateUserInDynamo"
+            End: true
+    is-save-success:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: $[0].input.isValid
+              BooleanEquals: true
+          Next: send-success-response
+    send-success-response:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendSuccessResponse"
+      End: true
+    send-err-message:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendErrMessage"
+      End: true

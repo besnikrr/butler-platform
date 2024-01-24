@@ -1,0 +1,390 @@
+[
+   {
+      "totalItemsCount":1,
+      "sk":"category",
+      "pk":"meta",
+      "type":"META"
+   },
+   {
+      "sk":"category::11d640a6-130a-4e80-b596-c0d80649d05e",
+      "name":"Breakfast",
+      "available_period":{
+         "end_time":"06:00",
+         "start_time":"12:00"
+      },
+      "created_at":1637582217672,
+      "pk":"category",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "created_by":{
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "name":"Lunch",
+      "available_period":{
+         "end_time":"20:00",
+         "start_time":"08:00"
+      },
+      "created_at":1637582217672,
+      "pk":"category",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "created_by":{
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "totalItemsCount":2,
+      "sk":"subcategory",
+      "pk":"meta",
+      "type":"META"
+   },
+   {
+      "gs1pk":"subcategory::category",
+      "sk":"subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338",
+      "name":"Sandwich",
+      "created_at":1637582263388,
+      "pk":"subcategory",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "category":{
+         "name":"Lunch",
+         "id":"category::e31f0359-6814-4cb3-b636-6c4f0275d611"
+      },
+      "type":"SUBCATEGORY",
+      "gs1sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "created_by":{
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "gs1pk":"subcategory::category",
+      "sk":"subcategory::f0430d56-16bd-46d8-8f87-426ec496961d",
+      "name":"Salads",
+      "created_at":1637586928577,
+      "pk":"subcategory",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "category":{
+         "name":"Lunch",
+         "id":"category::e31f0359-6814-4cb3-b636-6c4f0275d611"
+      },
+      "type":"SUBCATEGORY",
+      "gs1sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "created_by":{
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "needs_cutlery":true,
+      "image": "5b27759d-79cd-4788-9437-28aad5118913",
+      "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+      "item_id":"item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+      "raw_food":true,
+      "description":"Salad Description",
+      "type":"LIST-ITEM",
+      "labels":[
+
+      ],
+      "price": 4,
+      "guest_view":true,
+      "sk":"list-item#item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+      "name":"Salad",
+      "pk":"list-item"
+   },
+   {
+      "needs_cutlery":true,
+      "image": "5b27759d-79cd-4788-9437-28aad5118913",
+      "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+      "item_id":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "raw_food":true,
+      "description":"Sandwich description",
+      "type":"LIST-ITEM",
+      "labels":[
+
+      ],
+      "price": 5,
+      "guest_view":true,
+      "sk":"list-item#item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "name":"Sandwich",
+      "pk":"list-item"
+   },
+   {
+      "needs_cutlery":true,
+      "gs1pk":"item::subcategory",
+      "image": "5b27759d-79cd-4788-9437-28aad5118913",
+      "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+      "gs2pk":"item::category",
+      "gs3pk":"item",
+      "category_name":"Lunch",
+      "raw_food":true,
+      "description":"Sandwich description",
+      "subcategory_name":"Sandwich",
+      "modifiers":[
+         {
+            "name":"Sauce",
+            "id":"modifier::4174445b-6ed8-4bff-b751-9afd3daea569"
+         }
+      ],
+      "type":"ITEM",
+      "labels":[
+
+      ],
+      "price": 5,
+      "guest_view":true,
+      "name":"Sandwich",
+      "sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338#item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "pk":"item",
+      "gs1sk":"subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866"
+   },
+   {
+      "needs_cutlery":true,
+      "gs1pk":"item::subcategory",
+      "image": "5b27759d-79cd-4788-9437-28aad5118913",
+      "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+      "gs2pk":"item::category",
+      "gs3pk":"item",
+      "category_name":"Lunch",
+      "raw_food":true,
+      "description":"Salad Description",
+      "subcategory_name":"Salads",
+      "modifiers":[
+
+      ],
+      "type":"ITEM",
+      "labels":[
+
+      ],
+      "price": 4,
+      "guest_view":true,
+      "name":"Salad",
+      "sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::f0430d56-16bd-46d8-8f87-426ec496961d#item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+      "pk":"item",
+      "gs1sk":"subcategory::f0430d56-16bd-46d8-8f87-426ec496961d",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce"
+   },
+   {
+      "totalItemsCount":1,
+      "sk":"modifier",
+      "pk":"meta",
+      "type":"META"
+   },
+   {
+      "multiselect":true,
+      "sk":"modifier::4174445b-6ed8-4bff-b751-9afd3daea569",
+      "options":[
+         {
+            "name":"Cury",
+            "price":3
+         },
+         {
+            "name":"Barbecue",
+            "price":2
+         }
+      ],
+      "name":"Sauce",
+      "created_at":1637586331235,
+      "pk":"modifier",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "created_by":{
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "sk":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "gs1pk":"modifier::item",
+      "item":{
+         "name":"Sandwich",
+         "id":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866"
+      },
+      "pk":"modifier::4174445b-6ed8-4bff-b751-9afd3daea569#item",
+      "type":"MODIFIER-ITEM",
+      "gs1sk":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866"
+   },
+   {
+      "totalItemsCount":1,
+      "sk":"menu",
+      "pk":"meta",
+      "type":"META"
+   },
+   {
+      "categories": {
+         "category::e31f0359-6814-4cb3-b636-6c4f0275d611":{
+            "name":"Lunch",
+            "subcategories":{
+               "subcategory::f0430d56-16bd-46d8-8f87-426ec496961d":{
+                  "name":"Salads",
+                  "items":{
+                     "item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce":{
+                        "needs_cutlery":true,
+                        "image": "5b27759d-79cd-4788-9437-28aad5118913",
+                        "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+                        "price": 4,
+                        "raw_food":true,
+                        "description":"Salad Description",
+                        "modifiers": [],
+                        "labels":[
+
+                        ],
+                        "is_popular":true,
+                        "is_favorite":true,
+                        "guest_view":true,
+                        "name":"Salad",
+                        "id":"item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+                        "suggested_items":[
+
+                        ]
+                     }
+                  },
+                  "order":1
+               },
+               "subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338":{
+                  "name":"Sandwich",
+                  "items":{
+                     "item::605b6bd7-3869-46cd-8a53-79ff4b1a3866":{
+                        "needs_cutlery":true,
+                        "image": "5b27759d-79cd-4788-9437-28aad5118913",
+                        "image_base_url": "https://local-menu-butler.s3.amazonaws.com",
+                        "old_price": 5,
+                        "raw_food":true,
+                        "description":"Sandwich description",
+                        "modifiers":[
+                           {
+                              "name": "Sauce",
+                              "id": "modifier::4174445b-6ed8-4bff-b751-9afd3daea569"
+                           }
+                        ],
+                        "labels":[
+
+                        ],
+                        "is_popular":true,
+                        "is_favorite":true,
+                        "price": 6,
+                        "guest_view":true,
+                        "name":"Sandwich",
+                        "id":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+                        "suggested_items":[
+
+                        ]
+                     }
+                  },
+                  "order":2
+               }
+            }
+         }
+      },
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "name":"Grand Hotel Menu",
+      "created_at":1637590496426,
+      "pk":"menu",
+      "created_by_id":"user::endrit@butlerhospitality.com",
+      "type":"MENU",
+      "hasChanges": true,
+      "published": false,
+      "status": "INACTIVE",
+      "assignedHotels": 0,
+      "created_by": {
+         "sk":"user::endrit@butlerhospitality.com",
+         "createdAt":1626131034245,
+         "pk":"user",
+         "email":"dev@localhost",
+         "displayName":"Dev User",
+         "roles":[
+            "role::super_admin"
+         ]
+      }
+   },
+   {
+      "gs1pk":"menu-category#menu",
+      "gs2pk":"menu-category#menu::category",
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5#category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "pk":"menu-category",
+      "type":"MENU-CATEGORY",
+      "gs1sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611"
+   },
+   {
+      "gs1pk":"menu-subcategory#menu",
+      "gs2pk":"menu-subcategory#menu::category",
+      "gs3pk":"menu-subcategory#menu::subcategory",
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5#category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338",
+      "pk":"menu-subcategory",
+      "type":"MENU-SUBCATEGORY",
+      "gs1sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338"
+   },
+   {
+      "gs1pk":"menu-subcategory#menu",
+      "gs2pk":"menu-subcategory#menu::category",
+      "gs3pk":"menu-subcategory#menu::subcategory",
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5#category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::f0430d56-16bd-46d8-8f87-426ec496961d",
+      "pk":"menu-subcategory",
+      "type":"MENU-SUBCATEGORY",
+      "gs1sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"subcategory::f0430d56-16bd-46d8-8f87-426ec496961d"
+   },
+   {
+      "gs1pk":"menu-item#menu",
+      "gs4sk":"item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "gs2pk":"menu-item#menu::category",
+      "gs3pk":"menu-item#menu::subcategory",
+      "gs4pk":"menu-item#menu::item",
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5#category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338#item::605b6bd7-3869-46cd-8a53-79ff4b1a3866",
+      "pk":"menu-item",
+      "type":"MENU-ITEM",
+      "gs1sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"subcategory::2155fd88-cfc4-4b7a-a4c3-af3ef2b78338"
+   },
+   {
+      "gs1pk":"menu-item#menu",
+      "gs4sk":"item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+      "gs2pk":"menu-item#menu::category",
+      "gs3pk":"menu-item#menu::subcategory",
+      "gs4pk":"menu-item#menu::item",
+      "sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5#category::e31f0359-6814-4cb3-b636-6c4f0275d611#subcategory::f0430d56-16bd-46d8-8f87-426ec496961d#item::14a9ef1d-d6ba-4b1c-a8a4-70f59c4699ce",
+      "pk":"menu-item",
+      "type":"MENU-ITEM",
+      "gs1sk":"menu::c753205b-7f5f-40b7-9b9b-45c0105b4ef5",
+      "gs2sk":"category::e31f0359-6814-4cb3-b636-6c4f0275d611",
+      "gs3sk":"subcategory::f0430d56-16bd-46d8-8f87-426ec496961d"
+   }
+]

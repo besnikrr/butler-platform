@@ -1,0 +1,32 @@
+Resources:
+  ServiceIamUserTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_IAM_USER_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceIamUserTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceIamUserTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceIamUserTopic
+
+Outputs:
+  ServiceIamUserTopicArn:
+    Value: !Ref ServiceIamUserTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceIamUserTopic

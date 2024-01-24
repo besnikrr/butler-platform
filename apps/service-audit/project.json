@@ -1,0 +1,256 @@
+{
+  "root": "apps/service-audit",
+  "sourceRoot": "apps/service-audit",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/service-audit",
+        "main": "apps/service-audit/src/main.ts",
+        "tsConfig": "apps/service-audit/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "externalDependencies": "none",
+          "fileReplacements": [
+            {
+              "replace": "apps/service-audit/environments/environment.ts",
+              "with": "apps/service-audit/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-audit:base-build::production",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-audit/infrastructure ./dist/apps/service-audit/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-audit/db/migrations ./dist/apps/service-audit/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-audit/serverless.yml ./dist/apps/service-audit/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-audit/traits.yml ./dist/apps/service-audit/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      },
+      "configurations": {
+        "function-only": {
+          "commands": [
+            {
+              "command": "npm install",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "sls deploy function --function {args.function} --stage={args.stage} --region={args.region} --force",
+              "forwardAllArgs": false
+            }
+          ]
+        }
+      }
+    },
+    "base-serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "service-audit:base-build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx base-serve service-audit --port 9224",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false,
+        "cwd": "./"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/service-audit/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/service-audit"],
+      "options": {
+        "jestConfig": "apps/service-audit/jest.config.js",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "migrate-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node migrate-seed --service service-audit",
+        "cwd": "./tools/services"
+      }
+    },
+    "migrate-up-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function up --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "migrate-down-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function down --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-audit:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-audit/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-test --stage={args.stage} --traits-input-file ./apps/service-audit/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-up-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-down": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-down-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-audit",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

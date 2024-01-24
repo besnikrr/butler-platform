@@ -1,0 +1,66 @@
+getHubs:
+  permissionName: CAN_GET_HUBS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs
+        method: GET
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getHub:
+  permissionName: CAN_GET_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: GET
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createHub:
+  permissionName: CAN_CREATE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs
+        method: POST
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHub:
+  permissionName: CAN_UPDATE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deactivateHub:
+  permissionName: CAN_DEACTIVATE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/deactivate-hub
+        method: PUT
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteHub:
+  permissionName: CAN_DELETE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: DELETE
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

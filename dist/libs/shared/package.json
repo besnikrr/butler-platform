@@ -1,0 +1,10 @@
+{
+  "name": "@butlerhospitality/shared",
+  "version": "0.0.1",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "dependencies": {},
+  "peerDependencies": {
+    "@mikro-orm/core": "^4.5.10"
+  }
+}

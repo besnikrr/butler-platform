@@ -1,0 +1,96 @@
+type: EXPRESS
+name: 'DeleteUserSF'
+definition:
+  Comment: 'Delete User Step Function'
+  StartAt: validation-state
+  States:
+    validation-state:
+      Type: Parallel
+      Next: choice-state
+      Branches:
+      - StartAt: validate-exists
+        States:
+          validate-exists:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateUserExists"
+            End: true
+      - StartAt: validate-exist-in-cognito
+        States:
+          validate-exist-in-cognito:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateUserExistsInCognito"
+            End: true
+    choice-state:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: $[0].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[1].input.isValid
+              BooleanEquals: true
+          Next: transform-data
+    transform-data:
+      Type: Pass
+      Parameters:
+        -
+          context.$: $[0].context
+          input.$: $[0].input
+      OutputPath: "$[0]"
+      Next: delete-parallel
+    delete-parallel:
+      Type: Parallel
+      Next: is-delete-success
+      Branches:
+      - StartAt: delete-in-cognito
+        States:
+          delete-in-cognito:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-deleteUserInCognito"
+            End: true
+      - StartAt: delete-in-dynamo
+        States:
+          delete-in-dynamo:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-deleteUserInDynamo"
+            End: true
+    is-delete-success:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: $[0].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[1].input.isValid
+              BooleanEquals: true
+          Next: send-success-response
+    send-success-response:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendSuccessResponse"
+      End: true
+    send-err-message:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendErrMessage"
+      End: true

@@ -1,0 +1,47 @@
+Resources:
+  hubOnHotelCreateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hubOnHotelCreateDLQ.fifo"
+      FifoQueue: true
+  hubOnHotelCreateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hubOnHotelCreateQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - hubOnHotelCreateDLQ
+            - Arn
+        maxReceiveCount: 3
+  hubOnHotelCreateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHotel
+      Endpoint:
+        Fn::GetAtt:
+          - hubOnHotelCreateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HOTEL_CREATED'
+      RawMessageDelivery: 'true'
+  hubOnHotelCreateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt hubOnHotelCreateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHotel
+      Queues:
+        - Ref: hubOnHotelCreateQueue

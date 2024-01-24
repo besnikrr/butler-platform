@@ -1,0 +1,50 @@
+{
+  "root": "tools/services",
+  "sourceRoot": "tools/services",
+  "projectType": "application",
+  "targets": {
+    "kill-core": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sudo kill -9 $(ps ax | grep service-tenant | awk -F: 'NR==2 {print $1; exit}' | awk '{print $1}')"
+          },
+          {
+            "command": "sudo kill -9 $(ps ax | grep service-iam | awk -F: 'NR==2 {print $1; exit}' | awk '{print $1}')"
+          }
+        ],
+        "cwd": "./",
+        "parallel": true
+      }
+    },
+    "run-core": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run-many --target=serve --projects=service-tenant,service-iam,service-audit --parallel --maxParallel=100 --watch=false"
+          }
+        ],
+        "cwd": "infrastructure/sfsp-plugin/cli",
+        "parallel": false
+      }
+    },
+    "migrate-seed-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "node migrate-seed.js"
+          },
+          {
+            "command": "nx sync permissions"
+          }
+        ],
+        "cwd": "tools/services",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

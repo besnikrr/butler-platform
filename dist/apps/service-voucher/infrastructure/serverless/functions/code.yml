@@ -1,0 +1,24 @@
+getCodes:
+  permissionName: CAN_GET_HOTEL_VOUCHER_CODES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/codes/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getCode:
+  permissionName: CAN_GET_VOUCHER_CODE
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/code/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

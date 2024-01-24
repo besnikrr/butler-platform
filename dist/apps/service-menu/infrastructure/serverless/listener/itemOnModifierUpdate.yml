@@ -1,0 +1,9 @@
+itemOnModifierUpdate:
+  handler: main.itemOnModifierUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - itemOnModifierUpdateQueue
+            - Arn

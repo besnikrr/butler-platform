@@ -1,0 +1,9 @@
+hubOnHotelCreate:
+  handler: main.hubOnHotelCreate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hubOnHotelCreateQueue
+            - Arn

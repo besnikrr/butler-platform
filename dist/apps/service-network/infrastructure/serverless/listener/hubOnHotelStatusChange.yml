@@ -1,0 +1,9 @@
+hubOnHotelStatusChange:
+  handler: main.hubOnHotelStatusChange
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hubOnHotelStatusChangeQueue
+            - Arn

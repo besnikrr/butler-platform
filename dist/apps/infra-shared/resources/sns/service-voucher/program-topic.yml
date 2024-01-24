@@ -1,0 +1,32 @@
+Resources:
+  ServiceVoucherProgramTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_VOUCHER_PROGRAM_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceVoucherProgramTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceVoucherProgramTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceVoucherProgramTopic
+
+Outputs:
+  ServiceVoucherProgramTopicArn:
+    Value: !Ref ServiceVoucherProgramTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceVoucherProgramTopic

@@ -1,0 +1,11 @@
+Resources:
+  AfterDeployTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: AFTER_DEPLOY_TOPIC
+
+Outputs:
+  AfterDeployTopicArn:
+    Value: !Ref AfterDeployTopic
+    Export:
+      Name: ${self:provider.stage}-ext-AfterDeployTopic

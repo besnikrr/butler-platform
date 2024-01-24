@@ -1,0 +1,20 @@
+validateHotelPartnersInput:
+  handler: main.validateHotelPartnersInput
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+transformDataForSynchronization:
+  handler: main.transformDataForSynchronization
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+syncHotelPartnersInDynamodbAndCognito:
+  handler: main.syncHotelPartnersInDynamodbAndCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+sendSuccessResponseForHotelPartners:
+  handler: main.sendSuccessResponseForHotelPartners
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live

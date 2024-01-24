@@ -1,0 +1,6 @@
+Resources:
+  ServiceMenuModifier:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: ServiceMenuModifier-${self:provider.stage}.fifo
+      FifoTopic: true

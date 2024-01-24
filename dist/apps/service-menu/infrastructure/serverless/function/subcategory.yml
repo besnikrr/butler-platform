@@ -1,0 +1,84 @@
+getSubcategories:
+  permissionName: CAN_GET_SUBCATEGORIES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getSubcategory:
+  permissionName: CAN_GET_SUBCATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getSubcategoryRelations:
+  permissionName: CAN_GET_SUBCATEGORY_RELATIONS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories/relations/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createSubcategory:
+  permissionName: CAN_CREATE_SUBCCATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+patchSubcategory:
+  permissionName: CAN_PATCH_SUBCATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteSubcategory:
+  permissionName: CAN_DELETE_SUBCATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+batchGetSubcategories:
+  permissionName: CAN_BATCH_GET_SUBCATEGORIES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/subcategories/batch/get
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

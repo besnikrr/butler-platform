@@ -1,0 +1,9 @@
+cityOnHotelDelete:
+  handler: main.cityOnHotelDelete
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - cityOnHotelDeleteQueue
+            - Arn

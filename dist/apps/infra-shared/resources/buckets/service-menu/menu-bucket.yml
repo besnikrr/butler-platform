@@ -1,0 +1,42 @@
+Resources:
+  ServiceMenuBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:provider.stage}-menu-butler-${aws:accountId}
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - "*"
+            AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+            MaxAge: 3000
+  ServiceMenuBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ServiceMenuBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+            Effect: Allow
+            Resource: !Join
+              - ""
+              - - "arn:aws:s3:::"
+                - !Ref ServiceMenuBucket
+                - /*
+            Principal: "*"
+
+Outputs:
+  ServiceMenuBucketArn:
+    Value: !Ref ServiceMenuBucket
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceMenuBucket
+

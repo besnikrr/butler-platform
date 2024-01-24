@@ -1,0 +1,90 @@
+getLabels:
+  permissionName: CAN_GET_LABELS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/labels
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getLabel:
+  permissionName: CAN_GET_LABEL
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/labels/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createLabel:
+  permissionName: CAN_CREATE_LABEL
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/labels
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateLabel:
+  permissionName: CAN_UPDATE_LABEL
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/labels/{id}
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteLabel:
+  permissionName: CAN_DELETE_LABEL
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/labels/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+listLabels:
+  permissionName: CAN_LIST_LABELS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/list/labels/
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

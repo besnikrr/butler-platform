@@ -1,0 +1,11 @@
+name: shared
+type: infra
+
+deploy: true
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod

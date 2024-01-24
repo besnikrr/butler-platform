@@ -1,0 +1,6 @@
+networkHotelOnMenuAssignAction:
+  handler: main.networkHotelOnMenuAssignAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.networkHotelOnMenuAssignActionQueue}

@@ -1,0 +1,6 @@
+networkMenuOnMenuMenuAction:
+  handler: main.networkMenuOnMenuMenuAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.networkMenuOnMenuMenuActionQueue}

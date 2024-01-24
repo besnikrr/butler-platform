@@ -1,0 +1,32 @@
+Resources:
+  ServiceNetworkHotelTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_NETWORK_HOTEL_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceNetworkHotelTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceNetworkHotelTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceNetworkHotelTopic
+
+Outputs:
+  ServiceNetworkHotelTopicArn:
+    Value: !Ref ServiceNetworkHotelTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceNetworkHotelTopic

@@ -1,0 +1,19 @@
+afterServiceDeploy:
+  handler: main.afterServiceDeploy
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    MAIN_TABLE: ${self:custom.secrets.dynamodb_app_main_table_name}
+    STAGE: ${self:provider.stage}
+    POSTGRES_USER: ${self:custom.secrets.aurora_master_user}
+    POSTGRES_HOST: ${self:custom.secrets.aurora_endpoint}
+    POSTGRES_PASSWORD: ${self:custom.secrets.aurora_master_user_password}
+  events:
+    - sns:
+        arn: !Ref AfterDeployTopic
+        topicName: AFTER_DEPLOY_TOPIC

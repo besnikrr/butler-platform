@@ -1,0 +1,6 @@
+<%= listener %>:
+  handler: main.<%= listener %>
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.<%= queue %>}

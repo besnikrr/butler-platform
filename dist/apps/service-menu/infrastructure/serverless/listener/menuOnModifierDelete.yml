@@ -1,0 +1,9 @@
+menuOnModifierDelete:
+  handler: main.menuOnModifierDelete
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - menuOnModifierDeleteQueue
+            - Arn

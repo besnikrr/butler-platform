@@ -1,0 +1,60 @@
+getCities:
+  permissionName: CAN_GET_CITIES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/cities
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getCity:
+  permissionName: CAN_GET_CITY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/cities/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createCity:
+  permissionName: CAN_CREATE_CITY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/cities
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateCity:
+  permissionName: CAN_UPDATE_CITY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/cities/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteCity:
+  permissionName: CAN_DELETE_CITY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/cities/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

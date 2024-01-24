@@ -1,0 +1,9 @@
+itemOnModifierDelete:
+  handler: main.itemOnModifierDelete
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - itemOnModifierDeleteQueue
+            - Arn

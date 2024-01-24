@@ -1,0 +1,11 @@
+getApps:
+  permissionName: CAN_GET_APPS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/user-apps
+        method: GET
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

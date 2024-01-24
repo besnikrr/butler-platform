@@ -1,0 +1,291 @@
+{
+  "root": "apps/service-order",
+  "sourceRoot": "apps/service-order",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/service-order",
+        "main": "apps/service-order/src/main.ts",
+        "tsConfig": "apps/service-order/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/service-order/src/environments/environment.ts",
+              "with": "apps/service-order/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build-local": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run service-order:base-build::production",
+          "cp -r ./apps/service-order/db/migrations ./dist/apps/service-order/",
+          "cp -r ./apps/service-order/infrastructure ./dist/apps/service-order/",
+          "cp ./apps/service-order/serverless.yml ./dist/apps/service-order/",
+          "cp ./apps/service-order/traits.yml ./dist/apps/service-order/"
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      },
+      "configurations": {
+        "function-only": {
+          "commands": [
+            {
+              "command": "npm install",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "sls deploy function --function {args.function} --stage={args.stage} --region={args.region} --force",
+              "forwardAllArgs": false
+            }
+          ]
+        }
+      }
+    },
+    "migrate-up-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function up --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "migrate-down-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function down --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "base-serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "service-order:base-build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx base-serve service-order --port 9239",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false,
+        "cwd": "./"
+      }
+    },
+    "lint-local": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/service-order/**/*.ts"
+        ]
+      }
+    },
+    "test-local": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/service-order"
+      ],
+      "options": {
+        "jestConfig": "apps/service-order/jest.config.js",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "migrate-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node migrate-seed --service service-order",
+        "cwd": "./tools/services"
+      }
+    },
+    "mikro-orm": {
+      "executor": "@alexy4744/nx-mikro-orm-cli:run",
+      "options": {
+        "config": {
+          "configPaths": [
+            "./db/mikro-orm-config.ts"
+          ],
+          "tsConfigPath": "tsconfig.app.json",
+          "useTsNode": true
+        }
+      }
+    },
+
+    "x-pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "x-pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-order:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "x-pipeline-sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "x-pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-order/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "x-pipeline-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-test --stage={args.stage} --traits-input-file ./apps/service-order/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "x-pipeline-migrations-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-up-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "x-pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run service-order:pipeline-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    },
+    "x-pipeline-migrations-down": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-down-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-order",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

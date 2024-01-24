@@ -1,0 +1,10 @@
+onConnect:
+  handler: main.connect
+  events:
+    - websocket:
+        route: $connect
+onDisconnect:
+  handler: main.disconnect
+  events:
+    - websocket:
+        route: $disconnect

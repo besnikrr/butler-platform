@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../libs/service-sdk/sockets/index.ts"],"names":[],"mappings":";;;AAAA,6CAAiD;AACjD,+CAA2D;AAE3D,MAAM,mBAAmB,GAAG,CAAC,IAAuB,EAAE,EAAE;IACtD,QAAQ,IAAI,EAAE;QACd,KAAK,8BAAiB,CAAC,UAAU;YAC/B,OAAO,IAAI,wCAA0B,EAAE,CAAC;QAC1C;YACE,MAAM,IAAI,KAAK,CAAC,8BAA8B,CAAC,CAAC;KACjD;AACH,CAAC,CAAC;AAEO,kDAAmB"}

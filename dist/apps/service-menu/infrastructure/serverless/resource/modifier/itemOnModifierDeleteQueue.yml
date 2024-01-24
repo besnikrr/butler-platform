@@ -1,0 +1,47 @@
+Resources:
+  itemOnModifierDeleteDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'itemOnModifierDeleteDLQ.fifo'
+      FifoQueue: true
+  itemOnModifierDeleteQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'itemOnModifierDeleteQueue.fifo'
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - itemOnModifierDeleteDLQ
+            - Arn
+        maxReceiveCount: 3
+  itemOnModifierDeleteSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceMenuModifier
+      Endpoint:
+        Fn::GetAtt:
+          - itemOnModifierDeleteQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'MODIFIER_DELETED'
+      RawMessageDelivery: 'true'
+  itemOnModifierDeleteQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt itemOnModifierDeleteQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceMenuModifier
+      Queues:
+        - Ref: itemOnModifierDeleteQueue

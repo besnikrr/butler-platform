@@ -1,0 +1,52 @@
+Resources:
+  networkUserOnIamUserActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "networkUserOnIamUserActionDLQ.fifo"
+      FifoQueue: true
+  networkUserOnIamUserActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "networkUserOnIamUserActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt networkUserOnIamUserActionDLQ.Arn
+        maxReceiveCount: 3
+  networkUserOnIamUserActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceIamUserTopic
+      Endpoint: !GetAtt networkUserOnIamUserActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "USER_CREATED"
+          - "USER_UPDATED"
+          - "USER_DELETED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  networkUserOnIamUserActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt networkUserOnIamUserActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceIamUserTopic
+      Queues:
+        - Ref: networkUserOnIamUserActionQueue
+
+Outputs:
+  networkUserOnIamUserActionQueueArn:
+    Value: !GetAtt networkUserOnIamUserActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-networkUserOnIamUserActionQueue

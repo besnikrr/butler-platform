@@ -1,0 +1,65 @@
+saveRoleInCognito:
+  handler: main.saveRoleInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+saveRoleInDynamo:
+  handler: main.saveRoleInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+sendErrMessage:
+  handler: main.sendErrMessage
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateRoleInput:
+  handler: main.validateRoleInput
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateRoleExists:
+  handler: main.validateRoleExists
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validatePermissions:
+  handler: main.validatePermissions
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+updateRoleInCognito:
+  handler: main.updateRoleInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+updateRoleInDynamo:
+  handler: main.updateRoleInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateRoleDoesNotExist:
+  handler: main.validateRoleDoesNotExist
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+deleteRoleInDynamo:
+  handler: main.deleteRoleInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+deleteRoleInCognito:
+  handler: main.deleteRoleInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateHasNoUsers:
+  handler: main.validateHasNoUsers
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateDeleteRoleInput:
+  handler: main.validateDeleteRoleInput
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live

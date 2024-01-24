@@ -1,0 +1,16 @@
+name: menu
+type: service
+
+deploy: true
+migrations: true
+sfsp: true
+test: true
+lint: true
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod
+  - test

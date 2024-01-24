@@ -1,0 +1,9 @@
+hubOnHotelDelete:
+  handler: main.hubOnHotelDelete
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hubOnHotelDeleteQueue
+            - Arn

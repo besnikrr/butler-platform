@@ -1,0 +1,9 @@
+hubOnCityUpdate:
+  handler: main.hubOnCityUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hubOnCityUpdateQueue
+            - Arn

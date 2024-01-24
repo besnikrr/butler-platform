@@ -1,0 +1,144 @@
+getHotels:
+  permissionName: CAN_GET_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getHotel:
+  permissionName: CAN_GET_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createHotel:
+  permissionName: CAN_CREATE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotel:
+  permissionName: CAN_UPDATE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteHotel:
+  permissionName: CAN_DELETE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+changeHotelStatus:
+  permissionName: CAN_CHANGE_HOTEL_STATUS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/status/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelVoucherIntegration:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_VOUCHERS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelPaymentIntegration:
+  permissionName: CAN_UPDATE_HOTEL_PAYMENTS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelCarServiceIntegration:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_CAR_SERVICE
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelActivitiesIntegration:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_ACTIVITIES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getHotelMenuIntegration:
+  permissionName: CAN_GET_HOTEL_MENU
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelMenuIntegration:
+  permissionName: CAN_UPDATE_HOTEL_MENU
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

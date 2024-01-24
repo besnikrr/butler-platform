@@ -1,0 +1,39 @@
+service: shared
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+        - sns:*
+      Resource: "*"
+
+custom:
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+
+functions:
+  - ${file(./resources/functions/shared/after-service-deploy.yml)}
+
+resources:
+  - ${file(./resources/sqs/service-voucher/on-menu-assign-action.yml)}
+  - ${file(./resources/sns/service-voucher/program-topic.yml)}
+  - ${file(./resources/sns/shared/after-deploy-topic.yml)}
+  - ${file(./resources/sqs/service-voucher/on-network-hotel-action.yml)}
+  - ${file(./resources/buckets/service-menu/menu-bucket.yml)}
+  - ${file(./resources/sns/service-network/city-topic.yml)}
+  - ${file(./resources/sqs/service-menu/on-network-hotel-action.yml)}
+  - ${file(./resources/sns/service-network/hotel-topic.yml)}
+  - ${file(./resources/sqs/service-menu/on-network-hub-action.yml)}
+  - ${file(./resources/sns/service-menu/modifier-topic.yml)}
+  - ${file(./resources/sns/service-menu/product-topic.yml)}
+  - ${file(./resources/sqs/service-voucher/on-network-hub-action.yml)}
+  - ${file(./resources/sqs/service-discount/on-network-hub-action.yml)}
+  - ${file(./resources/sns/service-network/hub-topic.yml)}
+  - ${file(./resources/sqs/service-network/on-iam-user-action.yml)}
+  - ${file(./resources/sns/service-iam/user-topic.yml)}
+  - ${file(./resources/sqs/service-network/on-menu-menu-action.yml)}
+  - ${file(./resources/sns/service-menu/menu-topic.yml)}
+  - ${file(./resources/sqs/service-voucher/on-menu-category-action.yml)}
+  - ${file(./resources/sns/service-menu/category-topic.yml)}

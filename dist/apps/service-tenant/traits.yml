@@ -1,0 +1,16 @@
+name: tenant
+type: service
+
+deploy: true
+migrations: false
+sfsp: false
+test: true
+lint: true
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod
+  - test

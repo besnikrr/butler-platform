@@ -1,0 +1,123 @@
+service: order
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    websocketApiId: ${self:custom.secrets.api_ws_tenants_id}
+    description: ${self:provider.stage}-${self:service}-deployment
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    STAGE: ${self:provider.stage, 'dev'}
+    REGION: ${self:provider.region, 'us-east-1'}
+    DB: service_order
+    IAM_DB: service_iam
+    NETWORK_DB: service_network
+    MENU_DB: service_menu
+    VOUCHER_DB: service_voucher
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+    SQUARE_ACCESS_TOKEN: ${self:custom.secrets.square_access_token}
+    SQUARE_LOCATION_ID: ${self:custom.secrets.square_location_id}
+    PMS_URL_LOCAL: http://localhost:3000/dev/room-charge
+    PMS_URL_DEV: https://dev-pms-api.butlerhospitality.com/room-charge
+    PMS_URL_QA: https://qa-pms-api.butlerhospitality.com/room-charge
+    PMS_URL_PROD: https://pms-api.butlerhospitality.com/room-charge
+    DYNAMO_TABLE_MANAGEMENT_CONNECTION: ${self:custom.secrets.web_sockets_connections_management, 'web-sockets-connections-management'}
+    DYNAMO_ENDPOINT: ${self:custom.secrets.dynamodb_endpoint, 'dynamodb.us-east-1.amazonaws.com'}
+    SOCKET_API_GATEWAY_URL: ${self:custom.secrets.api_ws_tenants_domain}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - sns:*
+        - sqs:*
+        - states:*
+        - secretsmanager:*
+        - dynamodb:*
+      Resource: "*"
+plugins:
+  - "@butlerhospitality/sfsp-plugin"
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+  - serverless-plugin-warmup
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-split-stacks
+  #- serverless-plugin-datadog
+custom:
+  #datadog:
+    #site: ${self:custom.secrets.datadog_site, "datadoghq.com"}
+    #apiKey: ${self:custom.secrets.datadog_apikey, "default"}
+
+  warmup:
+    default:
+      enabled: false
+  splitStacks:
+    nestedStackCount: 30
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+  prune:
+    automatic: true
+    number: 3
+  ext-config:
+    AfterDeployTopic: arn:aws:sns:${self:provider.region}:${self:custom.accountId}:AFTER_DEPLOY_TOPIC
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  AFTER_DEPLOY_TOPIC: ${self:custom.ext-config.AfterDeployTopic}
+  accountId: ${self:custom.secrets.account_id}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway4xxError
+      - apiGateway5xxError
+  app-definition:
+    name: "Order"
+    description: "Create and manage orders"
+    dashboard-settings:
+      group: "order"
+      iconColor: "#ffffff"
+      color: "#009900"
+      icon: "Pizza"
+      path: "orders"
+      title: "Order"
+
+functions:
+  - ${file(./infrastructure/serverless/functions/order.yml)}
+  - ${file(./infrastructure/serverless/functions/socket.yml)}
+  - ${file(./infrastructure/serverless/functions/migrations.yml)}
+
+resources:
+  - ${file(./infrastructure/serverless/resources/web-socket-table.yml)}

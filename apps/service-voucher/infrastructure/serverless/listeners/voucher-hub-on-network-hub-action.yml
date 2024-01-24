@@ -1,0 +1,6 @@
+voucherHubOnNetworkHubAction:
+  handler: main.voucherHubOnNetworkHubAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.voucherHubOnNetworkHubActionQueue}

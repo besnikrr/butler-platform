@@ -1,0 +1,9 @@
+assignedHubsOnHubDeactivate:
+  handler: main.assignedHubsOnHubDeactivate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - assignedHubsOnHubDeactivateQueue
+            - Arn

@@ -1,0 +1,16 @@
+version: "3"
+
+volumes:
+    platform-postgres-data:
+        driver: local
+
+services:
+  postgres:
+    image: postgres:9.6.5
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: platform
+    volumes:
+      - platform-postgres-data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"

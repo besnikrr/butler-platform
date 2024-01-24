@@ -1,0 +1,194 @@
+{
+  "definitions": {
+    "hotelResponse": {
+      "type": "object",
+      "properties": {
+        "formal_name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "web_settings": {
+          "$ref": "#/definitions/web_settings"
+        },
+        "payment_settings": {
+          "$ref": "#/definitions/payment_settings"
+        },
+        "is_tax_exempt": {
+          "type": "boolean"
+        },
+        "primary_contact": {
+          "$ref": "#/definitions/primary_contact"
+        },
+        "address": {
+          "$ref": "#/definitions/address"
+        },
+        "hub_id": {
+          "type": "string"
+        },
+        "hub": {
+          "$ref": "#/definitions/hub"
+        },
+        "allow_scheduled_orders": {
+          "type": "boolean"
+        },
+        "account_manager_id": {
+          "type": "string"
+        },
+        "account_manager": {
+          "$ref": "#/definitions/account_manager"
+        },
+        "integration_configs": {
+          "$ref": "#/definitions/integration_configs"
+        },
+        "delivery_instructions": {
+          "type": "string"
+        },
+        "menu_id": {
+          "type": "string"
+        },
+        "room_numbers": {
+          "type": "string",
+          "required": true,
+          "items": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "required": true,
+          "type": "string"
+        },
+        "country": {
+          "required": true,
+          "type": "string"
+        },
+        "line1": {
+          "required": true,
+          "type": "string"
+        },
+        "line2": {
+          "required": true,
+          "type": "string"
+        },
+        "zip_code": {
+          "required": true,
+          "type": "number"
+        },
+        "state": {
+          "required": true,
+          "type": "string"
+        }
+      }
+    },
+    "primary_contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "required": true,
+          "type": "boolean"
+        },
+        "phone": {
+          "required": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "payment_settings": {
+      "type": "object",
+      "properties": {
+        "allow_room_charge": {
+          "required": true,
+          "type": "boolean"
+        },
+        "allow_credit_card": {
+          "type": "boolean"
+        }
+      }
+    },
+    "web_settings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "required": true,
+          "type": "string"
+        },
+        "code": {
+          "required": true,
+          "type": "string"
+        },
+        "active": {
+          "required": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "hub": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "account_manager": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "integration_configs": {
+      "type": "object",
+      "properties": {
+        "pms": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "activities_app": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "shuttle_app": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "required": true,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

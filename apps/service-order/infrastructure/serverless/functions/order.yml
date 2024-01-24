@@ -1,0 +1,195 @@
+getOrder:
+  permissionName: CAN_GET_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getOrders:
+  permissionName: CAN_GET_ORDERS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createOrder:
+  permissionName: CAN_CREATE_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getOrdersByHubs:
+  permissionName: CAN_GET_ORDERS_BY_HUBS
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/list-by-hubs
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getOrderDashboard:
+  permissionName: CAN_GET_ORDER_DASHBOARD
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/dashboard
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+confirmOrder:
+  permissionName: CAN_CONFIRM_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/confirm
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+cancelOrder:
+  permissionName: CAN_CANCEL_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/cancel
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+rejectOrder:
+  permissionName: CAN_REJECT_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/reject
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deliverOrder:
+  permissionName: CAN_DELIVER_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/deliver
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+pickupOrder:
+  permissionName: CAN_PICKUP_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/pickup
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+refundOrder:
+  permissionName: CAN_REFUND_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/refund
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}  
+assignFoodCarrier:
+  permissionName: CAN_ASSIGN_FOOD_CARRIER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/assign-food-carrier
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}          
+assignOrderToMe:
+  permissionName: CAN_ASSIGN_ORDER
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/{id}/assign-order-to-me
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

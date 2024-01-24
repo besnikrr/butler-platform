@@ -1,0 +1,63 @@
+service: image-upload
+
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, "us-east-1"}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - states:*
+        - lambda:InvokeFunction
+      Resource: "*"
+plugins:
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+  - serverless-plugin-warmup
+  - serverless-plugin-aws-alerts
+custom:
+  warmup:
+    default:
+      enabled: true
+  prune:
+    automatic: true
+    number: 3
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  accountId: ${self:custom.secrets.account_id}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway5xxError
+      - apiGateway4xxError
+
+functions:
+  - ${file(./infrastructure/serverless/sfblock/general.yml)}
+
+stepFunctions:
+  stateMachines:
+    SaveImageSF: ${file(./infrastructure/serverless/workflow/save-image.yml)}

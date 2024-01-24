@@ -1,0 +1,53 @@
+Resources:
+  discountHubOnNetworkHubActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "discountHubOnNetworkHubActionDLQ.fifo"
+      FifoQueue: true
+  discountHubOnNetworkHubActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "discountHubOnNetworkHubActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt discountHubOnNetworkHubActionDLQ.Arn
+        maxReceiveCount: 3
+  discountHubOnNetworkHubActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceNetworkHubTopic
+      Endpoint: !GetAtt discountHubOnNetworkHubActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "HUB_CREATED"
+          - "HUB_UPDATED"
+          - "HUB_DELETED"
+          - "HUB_DEACTIVATED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  discountHubOnNetworkHubActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt discountHubOnNetworkHubActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHubTopic
+      Queues:
+        - Ref: discountHubOnNetworkHubActionQueue
+
+Outputs:
+  discountHubOnNetworkHubActionQueueArn:
+    Value: !GetAtt discountHubOnNetworkHubActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-discountHubOnNetworkHubActionQueue

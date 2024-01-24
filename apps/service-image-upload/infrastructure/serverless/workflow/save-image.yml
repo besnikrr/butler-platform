@@ -1,0 +1,81 @@
+type: EXPRESS
+name: 'SaveImageSF'
+definition:
+  Comment: 'Save Image Function'
+  StartAt: save-images
+  States:
+    save-images:
+      Type: Parallel
+      Next: is-valid
+      Branches:
+      - StartAt: save-400x400
+        States:
+          save-400x400:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-saveImage"
+            Parameters:
+              width: 400
+              height: 400
+              "bucket.$": "$.bucket"
+              "key.$": "$.key"
+              "originalkey.$": "$.originalkey"
+            End: true
+      - StartAt: save-500x500
+        States:
+          save-500x500:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-saveImage"
+            Parameters:
+              width: 500
+              height: 500
+              "bucket.$": "$.bucket"
+              "key.$": "$.key"
+              "originalkey.$": "$.originalkey"
+            End: true
+      - StartAt: save-600x600
+        States:
+          save-600x600:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-saveImage"
+            Parameters:
+              width: 600
+              height: 600
+              "bucket.$": "$.bucket"
+              "key.$": "$.key"
+              "originalkey.$": "$.originalkey"
+            End: true
+    is-valid:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: "$[0].isValid"
+              BooleanEquals: true
+            - 
+              Variable: "$[1].isValid"
+              BooleanEquals: true
+            - 
+              Variable: "$[1].isValid"
+              BooleanEquals: true
+          Next: send-success-response
+    send-success-response:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-imageSaveSuccess"
+      End: true
+    send-err-message:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-imageSaveError"
+      End: true

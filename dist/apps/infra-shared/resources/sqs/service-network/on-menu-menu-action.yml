@@ -1,0 +1,52 @@
+Resources:
+  networkMenuOnMenuMenuActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "networkMenuOnMenuMenuActionDLQ.fifo"
+      FifoQueue: true
+  networkMenuOnMenuMenuActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "networkMenuOnMenuMenuActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt networkMenuOnMenuMenuActionDLQ.Arn
+        maxReceiveCount: 3
+  networkMenuOnMenuMenuActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceMenuMenuTopic
+      Endpoint: !GetAtt networkMenuOnMenuMenuActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "MENU_UPDATED"
+          - "MENU_DELETED"
+          - "MENU_HOTELS_ASSIGNED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  networkMenuOnMenuMenuActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt networkMenuOnMenuMenuActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceMenuMenuTopic
+      Queues:
+        - Ref: networkMenuOnMenuMenuActionQueue
+
+Outputs:
+  networkMenuOnMenuMenuActionQueueArn:
+    Value: !GetAtt networkMenuOnMenuMenuActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-networkMenuOnMenuMenuActionQueue

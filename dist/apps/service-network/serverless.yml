@@ -1,0 +1,119 @@
+service: network
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    description: Some Description of deployment history
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    ServiceNetworkCityTopic: ${self:custom.ext-config.ServiceNetworkCityTopic}
+    ServiceNetworkHotelTopic: ${self:custom.ext-config.ServiceNetworkHotelTopic}
+    ServiceNetworkHubTopic: ${self:custom.ext-config.ServiceNetworkHubTopic}
+    networkUserOnIamUserActionQueue: ${self:custom.ext-config.networkUserOnIamUserActionQueue}
+    networkMenuOnMenuMenuActionQueue: ${self:custom.ext-config.networkMenuOnMenuMenuActionQueue}
+    ServiceNetworkHotel: "arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:SERVICE_NETWORK_HOTEL-${self:provider.stage}.fifo"
+    ServiceNetworkHub: "arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:SERVICE_NETWORK_HUB-${self:provider.stage}.fifo"
+    ServiceNetworkCity: "arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:SERVICE_NETWORK_CITY-${self:provider.stage}.fifo"
+    STAGE: ${self:provider.stage, 'dev'}
+    REGION: ${self:provider.region, 'us-east-1'}
+    NETWORK_BUCKET: ${self:provider.environment.STAGE}-network-butler-#{AWS::AccountId}
+    DEFAULT_TENANT: "butler"
+    DB: service_network
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - sns:*
+        - sqs:*
+        - states:*
+        - secretsmanager:*
+      Resource: "*"
+plugins:
+  - "@butlerhospitality/sfsp-plugin"
+  - serverless-pseudo-parameters
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-warmup
+  - serverless-prune-plugin
+  - serverless-plugin-split-stacks
+custom:
+  ext-config:
+    ServiceNetworkCityTopic: !ImportValue ${self:provider.stage}-ext-ServiceNetworkCityTopic
+    ServiceNetworkHotelTopic: !ImportValue ${self:provider.stage}-ext-ServiceNetworkHotelTopic
+    ServiceNetworkHubTopic: !ImportValue ${self:provider.stage}-ext-ServiceNetworkHubTopic
+    networkUserOnIamUserActionQueue: !ImportValue ${self:provider.stage}-ext-networkUserOnIamUserActionQueue
+    networkMenuOnMenuMenuActionQueue: !ImportValue ${self:provider.stage}-ext-networkMenuOnMenuMenuActionQueue
+    AfterDeployTopic: arn:aws:sns:${self:provider.region}:${self:custom.accountId}:AFTER_DEPLOY_TOPIC
+  warmup:
+    default:
+      enabled: true
+  splitStacks:
+    nestedStackCount: 30
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+  prune:
+    automatic: true
+    number: 3
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  AFTER_DEPLOY_TOPIC: ${self:custom.ext-config.AfterDeployTopic}
+  accountId: ${self:custom.secrets.account_id}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway5xxError
+      - apiGateway4xxError
+  app-definition:
+    name: "Network"
+    description: "Manage cities, hubs and hotels"
+    dashboard-settings:
+      group: "network"
+      iconColor: "#ffffff"
+      color: "#FF9039"
+      icon: "Compass"
+      path: "network"
+      title: "Network"
+
+resources: {}
+
+functions:
+  - ${file(./infrastructure/serverless/listeners/network-user-on-iam-user-action.yml)}
+  - ${file(./infrastructure/serverless/listeners/network-menu-on-menu-menu-action.yml)}
+  - ${file(./infrastructure/serverless/functions/migrations.yml)}
+  - ${file(./infrastructure/serverless/functions/city.yml)}
+  - ${file(./infrastructure/serverless/functions/hub.yml)}
+  - ${file(./infrastructure/serverless/functions/hotel.yml)}
+  - ${file(./infrastructure/serverless/functions/user.yml)}

@@ -1,0 +1,80 @@
+type: EXPRESS
+name: 'DeleteRoleSF'
+loggingConfig:
+  level: ALL
+  includeExecutionData: true
+  destinations:
+    - Fn::GetAtt: [DeleteRoleSFLogs, Arn]
+definition:
+  Comment: 'Delete Role Step Function'
+  StartAt: validation-state
+  States:
+    validation-state:
+      Type: Parallel
+      Next: choice-state
+      Branches:
+      - StartAt: validate-input
+        States:
+          validate-input:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateDeleteRoleInput"
+            End: true
+      - StartAt: validate-exists
+        States:
+          validate-exists:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateRoleExists"
+            End: true
+      - StartAt: validate-has-no-users
+        States:
+          validate-has-no-users:
+            Type: Task
+            Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-validateHasNoUsers"
+            End: true
+    choice-state:
+      Type: Choice
+      Choices:
+        - 
+          Or:
+            - 
+              Variable: "$[0].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[1].input.isValid"
+              BooleanEquals: false
+            - 
+              Variable: "$[2].input.isValid"
+              BooleanEquals: false
+          Next: send-err-message
+        - 
+          And:
+            - 
+              Variable: $[0].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[1].input.isValid
+              BooleanEquals: true
+            - 
+              Variable: $[2].input.isValid
+              BooleanEquals: true
+          Next: transform-data
+    transform-data:
+      Type: Pass
+      Parameters:
+        -
+          context.$: $[0].context
+          input.$: $[0].input
+      OutputPath: "$[0]"
+      Next: delete-in-dynamo
+    # delete-in-cognito:
+    #   Type: Task
+    #   Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-deleteRoleInCognito"
+    #   Next: delete-in-dynamo
+    delete-in-dynamo:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-deleteRoleInDynamo"
+      End: true
+    send-err-message:
+      Type: Task
+      Resource: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:provider.stage}-sendErrMessage"
+      End: true

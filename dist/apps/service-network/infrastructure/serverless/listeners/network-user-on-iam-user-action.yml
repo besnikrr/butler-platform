@@ -1,0 +1,6 @@
+networkUserOnIamUserAction:
+  handler: main.networkUserOnIamUserAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.networkUserOnIamUserActionQueue}

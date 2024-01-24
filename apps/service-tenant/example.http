@@ -1,0 +1,15 @@
+curl 'http://localhost:3331/api/dashboard/user-apps' \
+  -H 'Connection: keep-alive' \
+  -H 'sec-ch-ua: "Google Chrome";v="95", "Chromium";v="95", ";Not A Brand";v="99"' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'Authorization: eyJraWQiOiJQczIwYW1tM1ErZ2pIZFZkdDkzM3REelprdU0wZGpjQ2xBK3JnWHlHM1g0PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3OTEyMTJlNy1mYTIzLTQzNmMtYjNjMy03NzA1NWU0OTc3NGQiLCJjb2duaXRvOmdyb3VwcyI6WyJyb2xlIiwiemFwYWxsaW5pIiwic3VwZXJfYWRtaW4iXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfVHEyOWluejVsIiwiY2xpZW50X2lkIjoiN25uM2M3bDg3OHI2dDN2aDRtaDkydWJwbDIiLCJvcmlnaW5fanRpIjoiNTYwOGJjZDYtZjAzMy00MWRhLWFhODItMzc1Njc2ZGY3NjJlIiwiZXZlbnRfaWQiOiJkYmEyOWNmOS02YjNjLTQzMmItYTA0Ni0xZmI5NjUxNzUxMWEiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjM3NzQ5Njg1LCJleHAiOjE2Mzc3NTMyODUsImlhdCI6MTYzNzc0OTY4NSwianRpIjoiOWMwNGIwZWYtODBlMC00ZjNmLWJlMzAtZmVlZWJkMGY5ZmIyIiwidXNlcm5hbWUiOiJlbmRyaXRAYnV0bGVyaG9zcGl0YWxpdHkuY29tIn0.uBv7ZNEKulMBsoVzyg1s3UqaipBdVgHDBT4ckR6Z1pnFudOflfa-XSliESWPwh2pGhr4Ogi-m3D4VueFrRn-5t7a05XAPLjjAvPE6RjhO--uACYZ7AWDlGQs6lBvE6RXKdTRncZ2plreSwo6ZlymddupF28x7kePD9Ns0iJi685yTenj1E84NpdLpT-fd8te2S94jC28u0FIA-wDjq8F2EoWdzsz7Tp5GyKZLskPXZR05hvykqYzvFihZ3gHbZj8tkOKuU0TfA7UojASB_TxpBIwyIDtgGKbfSpBpGCuDqULGrcno4TpsWYoe97ye3Y4eWn8xmDke-jeg-0Mbz-sXQ' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'Origin: http://butler.platform:4200' \
+  -H 'Sec-Fetch-Site: cross-site' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Referer: http://butler.platform:4200/' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  --compressed

@@ -1,0 +1,71 @@
+Resources:
+  PushToProductionMenuBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:provider.environment.STAGE}-menu-butler-#{AWS::AccountId}
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+            MaxAge: 3000
+  PushToProductionMenuBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref PushToProductionMenuBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref PushToProductionMenuBucket
+                - /*
+            Principal: '*'
+  PushToProductionMenuBucketLocal:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: local-menu-butler-#{AWS::AccountId}
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+            MaxAge: 3000
+  PushToProductionMenuBucketLocalPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref PushToProductionMenuBucketLocal
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref PushToProductionMenuBucketLocal
+                - /*
+            Principal: '*'

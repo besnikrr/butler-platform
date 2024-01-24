@@ -1,0 +1,6 @@
+voucherHotelOnMenuAssignAction:
+  handler: main.voucherHotelOnMenuAssignAction
+  timeout: 30
+  events:
+    - sqs:
+        arn: ${self:provider.environment.voucherHotelOnMenuAssignActionQueue}

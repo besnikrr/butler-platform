@@ -1,0 +1,291 @@
+[
+  {
+    "name": "New Hampton",
+    "sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "pk": "city",
+    "formal_name": "New Hampton",
+    "time_zone": "UTC-1",
+    "state": "NY",
+    "country": "US",
+		"aggregates": {
+      "count_hotels": 3,
+      "count_hubs": 2
+    },
+    "oms_pk": "oms",
+    "oms_sk": "oms::2222",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"}
+  },
+  {
+    "name": "New York",
+    "formal_name": "New York",
+    "sk": "city::b7cda55c-976c-526f-b39b-c7dd9abe91fc",
+    "id": "city::b7cda55c-976c-526f-b39b-c7dd9abe91fc",
+    "pk": "city",
+    "time_zone": "UTC-1",
+    "state": "NY",
+    "country": "US",
+    "aggregates": {
+      "count_hotels": 0,
+      "count_hubs": 0
+    },
+    "oms_pk": "oms",
+    "oms_sk": "oms::1234",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"}
+  },
+  {
+    "pk": "hub",
+    "sk": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+    "id": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+    "address": {
+      "city": "New York",
+      "country": "US",
+      "line1": "street-one",
+      "line2": "street-two",
+      "zip_code": 10982,
+      "state": "NY"
+    },
+    "coordinates": {"latitude": "44.232", "longitude": "-23.3321"},
+    "city_id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "city": {
+      "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+      "name": "New Hampton",      
+      "formalName": "New Hampton"      
+    },
+    "primary_contact": {"email": "some@email.com", "phone": "+133211233"},
+    "active": true,
+    "tax": {"percentage": 10},
+    "name": "HubOne",
+    "integration_configs": {
+      "quick_books": {
+        "class": "qb-class"
+      },
+      "expeditor_app": {
+        "enabled": true
+      },
+      "next_move_app": {
+        "enabled": false
+      }
+    },
+    "gs1pk": "city::hub",
+    "gs1sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"},
+		"aggregates": {
+      "count_hotels": 2
+    }
+  },
+  {
+    "pk": "hub",
+    "sk": "hub::630153f6-8e69-5a2f-bc08-3d09eda0573e",
+    "id": "hub::630153f6-8e69-5a2f-bc08-3d09eda0573e",
+    "address": {
+      "city": "New York",
+      "country": "US",
+      "line1": "street-three",
+      "line2": "street-four",
+      "zip_code": 10982,
+      "state": "NY"
+    },
+    "coordinates": {"latitude": "44.232", "longitude": "-23.3321"},
+    "city_id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "city": {
+      "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+      "name": "New Hampton",      
+      "formalName": "New Hampton"      
+    },
+    "primary_contact": {"email": "some@email.com", "phone": "+133211233"},
+    "active": true,
+    "tax": {"percentage": 10},
+    "name": "HubTwo",
+    "integration_configs": {
+      "quick_books": {
+        "class": "qb-class"
+      },
+      "expeditor_app": {
+        "enabled": true
+      },
+      "next_move_app": {
+        "enabled": false
+      }
+    },
+    "gs1pk": "city::hub",
+    "gs1sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"},
+		"aggregates": {
+      "count_hotels": 1
+    }
+  },
+  {
+    "pk": "hotel",
+    "sk": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+    "id": "hotel::2a819fbf-0f32-5ad2-9e6f-8e8bfb6e97c9",
+    "formal_name": "Hotel One 1",
+    "code": "hotelcodetwo",
+    "active": true,
+    "web_settings": {"code": "123OP", "active": true},
+    "payment_settings": {"allow_credit_card": true, "allow_room_charge": true},
+    "is_tax_exempt": false,
+    "address": {
+      "city": "New York",
+      "country": "US",
+      "line1": "street-one",
+      "line2": "street-two",
+      "zip_code": 10982,
+      "state": "NY"
+    },
+    "coordinates": {"latitude": "44.232", "longitude": "-23.3321"},
+    "primary_contact": {"email": "some@email.com", "phone": "+133211233"},
+    "allow_scheduled_orders": true,
+    "account_manager_id": "user::endrit@butlerhospitality.com",
+    "account_manager": {"id": "user::endrit@butlerhospitality.com", "name": "endrit"},
+    "integration_configs": {
+      "pms": {
+        "enabled": true
+      },
+      "activities_app": {
+        "enabled": true
+      },
+      "shuttle_app": {
+        "enabled": true
+      }
+    },
+    "hub_id": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+    "hub": {
+      "id": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+      "name": "HubOne"
+    },
+    "city_id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "city": {
+      "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+      "name": "New Hampton"
+    },
+    "delivery_instructions": "Leave every order at the door",
+    "room_numbers": ["111", "222"],
+    "name": "HotelOne",
+    "gs1pk": "hub::hotel",
+    "gs1sk": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+    "gs2pk": "city::hotel",
+    "gs2sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"}
+  },
+  {
+    "pk": "hotel",
+    "sk": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "id": "hotel::5deb8dbf-f84e-5b97-8c94-e0339e4886b1",
+    "formal_name": "Hotel Three 1",
+    "code": "hotelcodeone",
+    "active": true,
+    "web_settings": {"code": "123OP", "active": true},
+    "payment_settings": {"allow_credit_card": true, "allow_room_charge": true},
+    "is_tax_exempt": false,
+    "address": {
+      "city": "New York",
+      "country": "US",
+      "line1": "street-one",
+      "line2": "street-two",
+      "zip_code": 10982,
+      "state": "NY"
+    },
+    "coordinates": {"latitude": "44.232", "longitude": "-23.3321"},
+    "primary_contact": {"email": "some@email.com", "phone": "+133211233"},
+    "allow_scheduled_orders": true,
+    "account_manager_id": "user::endrit@butlerhospitality.com",
+    "account_manager": {"id": "user::endrit@butlerhospitality.com", "name": "endrit"},
+    "integration_configs": {
+      "pms": {
+        "enabled": true
+      },
+      "activities_app": {
+        "enabled": true
+      },
+      "shuttle_app": {
+        "enabled": true
+      }
+    },
+    "hub_id": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+    "hub": {
+      "id": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+      "name": "HubOne"
+    },
+		"city_id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "city": {
+      "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+      "name": "New Hampton"
+    },
+    "delivery_instructions": "Leave every order at the door",
+    "room_numbers": ["111", "222"],
+    "name": "HotelThree",
+    "gs1pk": "hub::hotel",
+    "gs1sk": "hub::93b11d31-2a87-5104-9fde-2502ba010d6e",
+		"gs2pk": "city::hotel",
+    "gs2sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"}
+  },
+  {
+    "pk": "hotel",
+    "sk": "hotel::9078ae13-ffd5-5b8e-9ddb-35de3241c3b0",
+    "id": "hotel::9078ae13-ffd5-5b8e-9ddb-35de3241c3b0",
+    "formal_name": "Hotel Two 1",
+    "code": "hotelcodefour",
+    "active": true,
+    "web_settings": {"code": "123OP", "active": true},
+    "payment_settings": {"allow_credit_card": true, "allow_room_charge": true},
+    "is_tax_exempt": false,
+    "address": {
+      "city": "New York",
+      "country": "US",
+      "line1": "street-one",
+      "line2": "street-two",
+      "zip_code": 10982,
+      "state": "NY"
+    },
+    "coordinates": {"latitude": "44.232", "longitude": "-23.3321"},
+    "primary_contact": {"email": "some@email.com", "phone": "+133211233"},
+    "allow_scheduled_orders": true,
+    "account_manager_id": "user::endrit@butlerhospitality.com",
+    "account_manager": {"id": "user::endrit@butlerhospitality.com", "name": "endrit"},
+    "integration_configs": {
+      "pms": {
+        "enabled": true
+      },
+      "activities_app": {
+        "enabled": true
+      },
+      "shuttle_app": {
+        "enabled": true
+      }
+    },
+    "hub_id": "hub::630153f6-8e69-5a2f-bc08-3d09eda0573e",
+    "hub": {
+      "id": "hub::630153f6-8e69-5a2f-bc08-3d09eda0573e",
+      "name": "HubTwo"
+    },
+		"city_id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "city": {
+      "id": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+      "name": "New Hampton"
+    },
+		"gs2pk": "city::hotel",
+    "gs2sk": "city::550a32a3-cec8-53cf-9fc8-98cf3656d9d0",
+    "delivery_instructions": "Leave every order at the door",
+    "room_numbers": ["111", "222"],
+    "name": "HotelTwo",
+    "gs1pk": "hub::hotel",
+    "gs1sk": "hub::630153f6-8e69-5a2f-bc08-3d09eda0573e",
+    "created_at": 1633428875199,
+    "created_by_id": "user::endrit@butlerhospitality.com",
+    "created_by": {"id": "user::endrit@butlerhospitality.com", "email": "endrit@butlerhospitality.com"}
+  }
+]

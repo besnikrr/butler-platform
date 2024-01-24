@@ -1,0 +1,9 @@
+hotelOnCityUpdate:
+  handler: main.hotelOnCityUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hotelOnCityUpdateQueue
+            - Arn

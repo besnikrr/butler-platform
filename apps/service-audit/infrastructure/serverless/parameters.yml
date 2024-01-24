@@ -1,0 +1,28 @@
+Parameters:
+  PlatformCitySNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_NETWORK_CITY_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformHubSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_NETWORK_HUB_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformHotelSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_NETWORK_HOTEL_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformCategorySNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_MENU_CATEGORY_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformModifierSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_MENU_MODIFIER_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformProductSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_MENU_PRODUCT_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformMenuSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_MENU_MENU_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  PlatformVoucherProgramSNSTopicARN:
+    Type: String
+    Default: "arn:aws:sns:${self:provider.region}:${self:custom.accountId}:SERVICE_VOUCHER_PROGRAM_TOPIC-${opt:stage, self:provider.stage}.fifo"
+  # PlatformVoucherCodeSNSTopicARN:
+  #   Type: String
+  #   Default: "arn:aws:sns:${aws:region}:${aws:accountId}:ServiceVoucherCode-${opt:stage, self:provider.stage}.fifo"

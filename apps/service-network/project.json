@@ -1,0 +1,312 @@
+{
+  "root": "apps/service-network",
+  "sourceRoot": "apps/service-network/src",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/service-network",
+        "main": "apps/service-network/src/main.ts",
+        "tsConfig": "apps/service-network/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/service-network/src/environments/environment.ts",
+              "with": "apps/service-network/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-network:base-build::production",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-network/infrastructure ./dist/apps/service-network/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-network/db/migrations ./dist/apps/service-network/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-network/serverless.yml ./dist/apps/service-network/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-network/traits.yml ./dist/apps/service-network/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      },
+      "configurations": {
+        "function-only": {
+          "commands": [
+            {
+              "command": "npm install",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "sls deploy function --function {args.function} --stage={args.stage} --region={args.region} --force",
+              "forwardAllArgs": false
+            }
+          ]
+        }
+      }
+    },
+    "migrate-up-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function up --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "migrate-down-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function down --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "migrate-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node migrate-seed --service service-network",
+        "cwd": "./tools/services"
+      }
+    },
+    "base-serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "service-network:base-build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx base-serve service-network --port 9237",
+            "forwardAllArgs": false
+          }
+        ],
+        "parallel": false,
+        "cwd": "./"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/service-network/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/service-network"],
+      "options": {
+        "jestConfig": "apps/service-network/jest.config.js",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "python modifyXML.py {args.environment} {args.browser-type} {args.platform-url}",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "mvn clean test -DselectedTests=service-network-{args.test-type}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "qa-e2e",
+        "parallel": false
+      }
+    },
+    "mikro-orm": {
+      "executor": "@alexy4744/nx-mikro-orm-cli:run",
+      "options": {
+        "config": {
+          "configPaths": ["../../libs/service-sdk/migrations/config.ts"],
+          "tsConfigPath": "tsconfig.app.json",
+          "useTsNode": true
+        }
+      }
+    },
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-network:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "pipeline-sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-network/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-test --stage={args.stage} --traits-input-file ./apps/service-network/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-up-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run service-network:pipeline-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-down": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-down-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-network",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

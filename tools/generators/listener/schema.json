@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "listener",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "description": "Service Name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "listener": {
+      "type": "string",
+      "description": "Listener Name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "queue": {
+      "type": "string",
+      "description": "Queue exported variable",
+      "$default": {
+				"$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["service", "listener", "queue"]
+}

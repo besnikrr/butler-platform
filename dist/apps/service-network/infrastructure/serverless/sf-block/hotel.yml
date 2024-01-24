@@ -1,0 +1,23 @@
+sfCreateHotel:
+  handler: main.sfCreateHotel
+sfGenerateQRCode:
+  handler: main.sfGenerateQRCode
+sfUpdateHotelSetQRCode:
+  handler: main.sfUpdateHotelSetQRCode
+
+validateData:
+  handler: main.validateData
+updateSmsUrl:
+  handler: main.updateSmsUrl
+validateRoomNumbers:
+  handler: main.validateRoomNumbers
+saveHotel:
+  handler: main.saveHotel
+addPartnerUser:
+  handler: main.addPartnerUser
+provisionPhoneNumber:
+  handler: main.provisionPhoneNumber
+createQuickBooksAccount:
+  handler: main.createQuickBooksAccount
+getNewTokens:
+  handler: main.getNewTokens

@@ -1,0 +1,1 @@
+{"version":3,"file":"http-error.js","sourceRoot":"","sources":["../../../../../libs/service-sdk/utils/error-types/http-error.ts"],"names":[],"mappings":";;;AAAA,6CAAsD;AAEtD,MAAM,SAAU,SAAQ,sBAAS;IAC/B,YAAY,OAAe,gBAAgB,EAAE,SAAsB,wBAAW,CAAC,eAAe,EAAE,UAAkB,wBAAwB,EAAE,MAAiB;QAC3J,KAAK,CAAC,IAAI,EAAE,MAAM,EAAE,OAAO,EAAE,MAAM,CAAC,CAAC;IACvC,CAAC;CACF;AAEQ,8BAAS"}

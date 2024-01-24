@@ -1,0 +1,8 @@
+getTenant:
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        cors: true
+        path: /${self:service}/current
+        method: GET

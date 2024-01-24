@@ -1,0 +1,16 @@
+name: network
+type: service
+
+deploy: true
+migrations: true
+sfsp: true
+lint: true
+test: true
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod
+  - test

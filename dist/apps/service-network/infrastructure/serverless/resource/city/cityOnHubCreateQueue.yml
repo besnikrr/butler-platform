@@ -1,0 +1,47 @@
+Resources:
+  cityOnHubCreateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHubCreateDLQ.fifo"
+      FifoQueue: true
+  cityOnHubCreateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHubCreateQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - cityOnHubCreateDLQ
+            - Arn
+        maxReceiveCount: 3
+  cityOnHubCreateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHub
+      Endpoint:
+        Fn::GetAtt:
+          - cityOnHubCreateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HUB_CREATED'
+      RawMessageDelivery: 'true'
+  cityOnHubCreateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt cityOnHubCreateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHub
+      Queues:
+        - Ref: cityOnHubCreateQueue

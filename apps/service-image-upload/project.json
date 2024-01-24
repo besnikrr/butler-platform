@@ -1,0 +1,123 @@
+{
+  "root": "apps/service-image-upload",
+  "sourceRoot": "apps/service-image-upload",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "mkdir -p ./dist/apps/service-image-upload",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "tsc apps/service-image-upload/main.ts && mv apps/service-image-upload/main.js ./dist/apps/service-image-upload",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-image-upload/package.json ./dist/apps/service-image-upload",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-image-upload/infrastructure ./dist/apps/service-image-upload",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-image-upload/serverless.yml ./dist/apps/service-image-upload",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-image-upload/traits.yml ./dist/apps/service-image-upload/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install --platform=linux sharp && npm i -D serverless-pseudo-parameters && sls plugin install --name serverless-step-functions",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-image-upload",
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/service-image-upload/**/*.ts"]
+      }
+    },
+
+
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install --platform=linux sharp && npm i -D serverless-pseudo-parameters && sls plugin install --name serverless-step-functions",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-image-upload",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-image-upload:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-image-upload",
+        "parallel": false
+      }
+    },
+    "pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-image-upload/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-image-upload",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

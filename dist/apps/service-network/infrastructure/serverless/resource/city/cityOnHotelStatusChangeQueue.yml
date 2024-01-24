@@ -1,0 +1,47 @@
+Resources:
+  cityOnHotelStatusChangeDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "cityOnHotelStatusChangeDLQ.fifo"
+      FifoQueue: true
+  cityOnHotelStatusChangeQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "cityOnHotelStatusChangeQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - cityOnHotelStatusChangeDLQ
+            - Arn
+        maxReceiveCount: 3
+  cityOnHotelStatusChangeSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceNetworkHotel
+      Endpoint:
+        Fn::GetAtt:
+          - cityOnHotelStatusChangeQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "HOTEL_STATUS_CHANGED"
+      RawMessageDelivery: "true"
+  cityOnHotelStatusChangeQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt cityOnHotelStatusChangeQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHotel
+      Queues:
+        - Ref: cityOnHotelStatusChangeQueue

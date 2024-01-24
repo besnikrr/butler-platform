@@ -1,0 +1,8 @@
+generateVouchersState:
+  handler: main.generateVouchersState
+
+generatePDFState:
+  handler: main.generatePDFState
+
+sendEmailState:
+  handler: main.sendEmailState

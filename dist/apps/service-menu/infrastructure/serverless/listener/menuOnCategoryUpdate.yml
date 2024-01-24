@@ -1,0 +1,9 @@
+menuOnCategoryUpdate:
+  handler: main.menuOnCategoryUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - menuOnCategoryUpdateQueue
+            - Arn

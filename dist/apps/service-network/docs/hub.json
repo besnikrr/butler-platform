@@ -1,0 +1,249 @@
+{
+  "paths": {
+    "/api/network/hubs/{id}": {
+      "get": {
+        "tags": ["Hubs"],
+        "operationId": "Get Single",
+        "description": "Get Hub by Id",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the hub to be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/hubResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Hubs"],
+        "operationId": "Patch",
+        "description": "Update Hub With ID",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the hub to update"
+          },
+          {
+            "name": "hub",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "required,": true
+                },
+                "city_id": {
+                  "type": "string",
+                  "required": true
+                },
+                "city": {
+                  "$ref": "#/definitions/city"
+                },
+                "active": {
+                  "type": "boolean",
+                  "required": true
+                },
+                "tax": {
+                  "$ref": "#/definitions/tax"
+                },
+                "primary_contact": {
+                  "$ref": "#/definitions/primary_contact"
+                },
+                "address": {
+                  "$ref": "#/definitions/address"
+                },
+                "integration_configs": {
+                  "$ref": "#/definitions/integration_configs"
+                },
+                "coordinates": {
+                  "$ref": "#/definitions/coordinates"
+                },
+                "expeditor_app": {
+                  "$ref": "#/definitions/expeditor_app"
+                },
+                "next_move_app": {
+                  "$ref": "#/definitions/next_move_app"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/hubResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Hubs"],
+        "operationId": "Delete",
+        "description": "Delete Hub by Id",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the hub to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": { "result": { "type": "boolean" } }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    },
+    "/api/network/hubs": {
+      "get": {
+        "tags": ["Hubs"],
+        "operationId": "Get",
+        "description": "Get All Hubs",
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/hubResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Hubs"],
+        "operationId": "Post",
+        "description": "Create New Hub",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "hub",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "required,": true
+                },
+                "city_id": {
+                  "type": "string",
+                  "required": true
+                },
+                "city": {
+                  "$ref": "#/definitions/city"
+                },
+                "active": {
+                  "type": "boolean",
+                  "required": true
+                },
+                "tax": {
+                  "$ref": "#/definitions/tax"
+                },
+                "primary_contact": {
+                  "$ref": "#/definitions/primary_contact"
+                },
+                "address": {
+                  "$ref": "#/definitions/address"
+                },
+                "integration_configs": {
+                  "$ref": "#/definitions/integration_configs"
+                },
+                "coordinates": {
+                  "$ref": "#/definitions/coordinates"
+                },
+                "expeditor_app": {
+                  "$ref": "#/definitions/expeditor_app"
+                },
+                "next_move_app": {
+                  "$ref": "#/definitions/next_move_app"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/hubResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {}
+}

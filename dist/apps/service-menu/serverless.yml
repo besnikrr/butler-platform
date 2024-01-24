@@ -1,0 +1,126 @@
+service: menu
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    description: Some Description of deployment history
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    menuHotelOnNetworkHotelActionQueue: ${self:custom.ext-config.menuHotelOnNetworkHotelActionQueue}
+    menuHubOnNetworkHubActionQueue: ${self:custom.ext-config.menuHubOnNetworkHubActionQueue}
+    ServiceMenuModifierTopic: ${self:custom.ext-config.ServiceMenuModifierTopic}
+    ServiceMenuProductTopic: ${self:custom.ext-config.ServiceMenuProductTopic}
+    ServiceMenuCategoryTopic: ${self:custom.ext-config.ServiceMenuCategoryTopic}
+    ServiceMenuMenuTopic: ${self:custom.ext-config.ServiceMenuMenuTopic}
+    STAGE: ${self:provider.stage, 'dev'}
+    REGION: ${self:provider.region, 'us-east-1'}
+    MENU_BUCKET: ${self:custom.ext-config.ServiceMenuBucket}
+    SAVE_IMAGE_SF: arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:SaveImageSF
+    IMAGE_BASE_URL: https://${self:provider.environment.STAGE}-menu-butler-#{AWS::AccountId}.s3.amazonaws.com #take from ssm
+    DEFAULT_TENANT: "butler"
+    DB: service_menu
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+    GENERATE_WEB_MENU_DEV: https://8fpi97wkpa.execute-api.us-east-1.amazonaws.com/dev
+    GENERATE_WEB_MENU_QA: https://lei14k21ub.execute-api.us-east-1.amazonaws.com/qa
+    GENERATE_WEB_MENU_PROD: https://w8y5q5bxi1.execute-api.us-east-1.amazonaws.com/prod
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - sns:*
+        - sqs:*
+        - states:*
+        - secretsmanager:*
+      Resource: "*"
+plugins:
+  - '@butlerhospitality/sfsp-plugin'
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-warmup
+  - serverless-plugin-split-stacks
+  
+custom:
+  ext-config:
+    menuHotelOnNetworkHotelActionQueue: !ImportValue ${self:provider.stage}-ext-menuHotelOnNetworkHotelActionQueue
+    menuHubOnNetworkHubActionQueue: !ImportValue ${self:provider.stage}-ext-menuHubOnNetworkHubActionQueue
+    ServiceMenuModifierTopic: !ImportValue ${self:provider.stage}-ext-ServiceMenuModifierTopic
+    ServiceMenuProductTopic: !ImportValue ${self:provider.stage}-ext-ServiceMenuProductTopic
+    ServiceMenuCategoryTopic: !ImportValue ${self:provider.stage}-ext-ServiceMenuCategoryTopic
+    ServiceMenuMenuTopic: !ImportValue ${self:provider.stage}-ext-ServiceMenuMenuTopic
+    ServiceMenuBucket: !ImportValue ${self:provider.stage}-ext-ServiceMenuBucket
+    AfterDeployTopic: arn:aws:sns:${self:provider.region}:${self:custom.accountId}:AFTER_DEPLOY_TOPIC
+  splitStacks:
+    nestedStackCount: 30
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+  warmup:
+    default:
+      enabled: false
+  prune:
+    automatic: true
+    number: 3
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway5xxError
+      - apiGateway4xxError
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  AFTER_DEPLOY_TOPIC: ${self:custom.ext-config.AfterDeployTopic}
+  accountId: ${self:custom.secrets.account_id}
+  app-definition:
+    name: "Menu"
+    description: "Manage inventory and menus"
+    dashboard-settings:
+      group: "menu"
+      iconColor: "#ffffff"
+      color: "#3C91E6"
+      icon: "Menu"
+      path: "menu"
+      title: "Menu"
+
+functions:
+  - ${file(./infrastructure/serverless/listeners/menu-hotel-on-network-hotel-action.yml)}
+  - ${file(./infrastructure/serverless/listeners/menu-hub-on-network-hub-action.yml)}
+  - ${file(./infrastructure/serverless/functions/migrations.yml)}
+  - ${file(./infrastructure/serverless/functions/menu.yml)}
+  - ${file(./infrastructure/serverless/functions/product.yml)}
+  - ${file(./infrastructure/serverless/functions/category.yml)}
+  - ${file(./infrastructure/serverless/functions/modifier.yml)}
+  - ${file(./infrastructure/serverless/functions/hub.yml)}
+  - ${file(./infrastructure/serverless/functions/hotel.yml)}

@@ -1,0 +1,84 @@
+getHubs:
+  permissionName: CAN_GET_HUBS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getHub:
+  permissionName: CAN_GET_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createHub:
+  permissionName: CAN_CREATE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHub:
+  permissionName: CAN_UPDATE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteHub:
+  permissionName: CAN_DELETE_HUB
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+changeHubStatus:
+  permissionName: CAN_CHANGE_HUB_STATUS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/status/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+reassignHubHotel:
+  permissionName: CAN_REASSIGN_HUB_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hubs/reassign-hotels/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

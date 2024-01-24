@@ -1,0 +1,32 @@
+Resources:
+  <%= topicName %>:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: <%= topicNameWithStage %>.fifo
+      FifoTopic: true
+
+  <%= topicName %>Policy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action: 
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: <%= topicName %>
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: <%= topicName %>
+
+Outputs:
+  <%= topicName %>Arn:
+    Value: !Ref <%= topicName %>
+    Export:
+      Name: ${self:provider.stage}-ext-<%= topicName %>

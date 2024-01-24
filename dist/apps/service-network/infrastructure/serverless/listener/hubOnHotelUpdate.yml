@@ -1,0 +1,9 @@
+hubOnHotelUpdate:
+  handler: main.hubOnHotelUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - hubOnHotelUpdateQueue
+            - Arn

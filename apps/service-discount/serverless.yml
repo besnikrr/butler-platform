@@ -1,0 +1,109 @@
+service: discount
+provider:
+  name: "aws"
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  apiGateway:
+    restApiId: ${self:custom.secrets.api_tenants_id}
+    restApiRootResourceId: ${self:custom.secrets.api_tenants_root_resource_id}
+    description: ${self:provider.stage}-${self:service}-deployment
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+  environment:
+    STAGE: ${self:provider.stage, 'dev'}
+    REGION: ${self:provider.region, 'us-east-1'}
+    DB: service_discount
+    DEFAULT_TENANT: butler
+    AURORA_ENDPOINT: ${self:custom.secrets.aurora_endpoint}
+    discountHubOnNetworkHubActionQueue: ${self:custom.ext-config.discountHubOnNetworkHubActionQueue}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+        - sns:*
+        - sqs:*
+        - states:*
+        - secretsmanager:*
+        - dynamodb:*
+      Resource: "*"
+plugins:
+  - "@butlerhospitality/sfsp-plugin"
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+  - serverless-plugin-warmup
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-split-stacks
+  #- serverless-plugin-datadog
+custom:
+  #datadog:
+    #site: ${self:custom.secrets.datadog_site, "datadoghq.com"}
+    #apiKey: ${self:custom.secrets.datadog_apikey, "default"}
+
+  warmup:
+    default:
+      enabled: false
+  splitStacks:
+    nestedStackCount: 30
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+  prune:
+    automatic: true
+    number: 3
+  ext-config:
+    discountHubOnNetworkHubActionQueue: arn:aws:sqs:${self:provider.region}:${self:custom.accountId}:discountHubOnNetworkHubActionQueue.fifo
+    AfterDeployTopic: arn:aws:sns:${self:provider.region}:${self:custom.accountId}:AFTER_DEPLOY_TOPIC
+  secrets: ${ssm:/aws/reference/secretsmanager/${self:provider.stage}/infra~true}
+  TABLE_MAIN: ${self:custom.secrets.dynamodb_app_main_table_name}
+  TENANTS_API_GATEWAY: ${self:custom.secrets.api_tenants_id}
+  AFTER_DEPLOY_TOPIC: ${self:custom.ext-config.AfterDeployTopic}
+  accountId: ${self:custom.secrets.account_id}
+  alerts:
+    topics:
+      alarm:
+        topic: ${self:custom.secrets.cloudwatch_alarms_sns_arn}
+    definitions:
+      functionTimeout:
+        description: Timeout of Lambda function
+        namespace: AWS/Lambda
+        nameTemplate: $[functionName]-Function-Timeout-Alarm
+        metric: Duration
+        threshold: 30000
+        statistic: Maximum
+        period: 60
+        evaluationPeriods: 1
+        datapointsToAlarm: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+      apiGateway4xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+      apiGateway5xxError:
+        apiName: ${self:custom.secrets.api_tenants_name}
+        resourcePrefix: /api/ # todo get it from secrets
+    alarms:
+      - functionErrorRate
+      - functionTimeout
+      - apiGateway4xxError
+      - apiGateway5xxError
+  app-definition:
+    name: "Discount"
+    description: "Create and manage discount codes"
+    dashboard-settings:
+      group: "discount"
+      iconColor: "#ffffff"
+      color: "#808080"
+      icon: "Discount"
+      path: "discount"
+      title: "Discount"
+
+functions:
+  - ${file(./infrastructure/serverless/functions/discount.yml)}
+  - ${file(./infrastructure/serverless/functions/migrations.yml)}
+  - ${file(./infrastructure/serverless/listeners/discount-hub-on-network-hub-action.yml)}

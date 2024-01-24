@@ -1,0 +1,47 @@
+Resources:
+  hubOnHotelStatusChangeDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "hubOnHotelStatusChangeDLQ.fifo"
+      FifoQueue: true
+  hubOnHotelStatusChangeQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "hubOnHotelStatusChangeQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - hubOnHotelStatusChangeDLQ
+            - Arn
+        maxReceiveCount: 3
+  hubOnHotelStatusChangeSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceNetworkHotel
+      Endpoint:
+        Fn::GetAtt:
+          - hubOnHotelStatusChangeQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "HOTEL_STATUS_CHANGED"
+      RawMessageDelivery: "true"
+  hubOnHotelStatusChangeQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt hubOnHotelStatusChangeQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHotel
+      Queues:
+        - Ref: hubOnHotelStatusChangeQueue

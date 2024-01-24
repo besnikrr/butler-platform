@@ -1,0 +1,276 @@
+{
+  "paths": {
+    "/api/network/hotels": {
+      "get": {
+        "tags": ["Hotel"],
+        "operationId": "GetHotels",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/hotelResponse"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Hotel"],
+        "operationId": "PostHotel",
+        "consumes": ["application/json"],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "hotel",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "formal_name": {
+                  "type": "string",
+                  "required,": true
+                },
+                "code": {
+                  "type": "string",
+                  "required": true
+                },
+                "active": {
+                  "type": "boolean",
+                  "required": true
+                },
+                "web_settings": {
+                  "required": true,
+                  "$ref": "#/definitions/web_settings"
+                },
+                "payment_settings": {
+                  "$ref": "#/definitions/payment_settings"
+                },
+                "is_tax_exempt": {
+                  "type": "boolean",
+                  "required": true
+                },
+                "primary_contact": {
+                  "$ref": "#/definitions/primary_contact"
+                },
+                "address": {
+                  "$ref": "#/definitions/address"
+                },
+                "hub_id": {
+                  "type": "string",
+                  "required": true
+                },
+                "hub": {
+                  "$ref": "#/definitions/hub"
+                },
+                "allow_scheduled_orders": {
+                  "type": "boolean",
+                  "required": true
+                },
+                "account_manager_id": {
+                  "type": "string",
+                  "required": true
+                },
+                "account_manager": {
+                  "$ref": "#/definitions/account_manager"
+                },
+                "integration_configs": {
+                  "$ref": "#/definitions/integration_configs"
+                },
+                "delivery_instructions": {
+                  "type": "string",
+                  "required": true
+                },
+                "menu_id": {
+                  "type": "string",
+                  "required": true
+                },
+                "room_numbers": {
+                  "type": "array",
+                  "required": true,
+                  "items": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/hotelResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    },
+    "/api/network/hotels/{id}": {
+      "get": {
+        "tags": ["Hotel"],
+        "operationId": "GetHotelByID",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/hotelResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Hotel"],
+        "operationId": "PatchHotelById",
+        "consumes": ["application/json"],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "name": "hotel",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "formal_name": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "web_settings": {
+                  "$ref": "#/definitions/web_settings"
+                },
+                "payment_settings": {
+                  "$ref": "#/definitions/payment_settings"
+                },
+                "is_tax_exempt": {
+                  "type": "boolean"
+                },
+                "primary_contact": {
+                  "$ref": "#/definitions/primary_contact"
+                },
+                "address": {
+                  "$ref": "#/definitions/address"
+                },
+                "hub_id": {
+                  "type": "string"
+                },
+                "hub": {
+                  "$ref": "#/definitions/hub"
+                },
+                "allow_scheduled_orders": {
+                  "type": "boolean"
+                },
+                "account_manager_id": {
+                  "type": "string"
+                },
+                "account_manager": {
+                  "$ref": "#/definitions/account_manager"
+                },
+                "integration_configs": {
+                  "$ref": "#/definitions/integration_configs"
+                },
+                "delivery_instructions": {
+                  "type": "string"
+                },
+                "menu_id": {
+                  "type": "string"
+                },
+                "room_numbers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "schema": {
+                "$ref": "#/definitions/hotelResponse"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Hotel"],
+        "operationId": "DeleteHotelByID",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": { "result": { "type": "boolean" } }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": [""]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {}
+}

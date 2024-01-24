@@ -1,0 +1,32 @@
+up:
+  handler: main.up
+  warmup:
+    default:
+      enabled: false
+  timeout: 300
+  alarms: # override base alarms
+    - name: functionTimeout
+      threshold: 300000
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}
+down:
+  handler: main.down
+  warmup:
+    default:
+      enabled: false 
+  timeout: 300
+  alarms: # override base alarms
+    - name: functionTimeout
+      threshold: 300000
+  vpc:
+    securityGroupIds:
+      - ${self:custom.secrets.aurora_lambdas_sg_id}
+    subnetIds:
+      - ${self:custom.secrets.vpc_subnet_private_1}
+      - ${self:custom.secrets.vpc_subnet_private_2}
+      - ${self:custom.secrets.vpc_subnet_private_3}

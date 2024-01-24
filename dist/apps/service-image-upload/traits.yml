@@ -1,0 +1,13 @@
+name: image-upload
+type: service
+
+deploy: true
+migrations: false
+sfsp: false
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod

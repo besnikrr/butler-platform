@@ -1,0 +1,47 @@
+Resources:
+  assignedHubsOnHubDeactivateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'assignedHubsOnHubDeactivateDLQ.fifo'
+      FifoQueue: true
+  assignedHubsOnHubDeactivateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'assignedHubsOnHubDeactivateQueue.fifo'
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - assignedHubsOnHubDeactivateDLQ
+            - Arn
+        maxReceiveCount: 3
+  assignedHubsOnHubDeactivateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHub
+      Endpoint:
+        Fn::GetAtt:
+          - assignedHubsOnHubDeactivateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HUB_DEACTIVATED'
+      RawMessageDelivery: 'true'
+  assignedHubsOnHubDeactivateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt assignedHubsOnHubDeactivateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHub
+      Queues:
+        - Ref: assignedHubsOnHubDeactivateQueue

@@ -1,0 +1,53 @@
+Resources:
+  voucherHubOnNetworkHubActionDLQ:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherHubOnNetworkHubActionDLQ.fifo"
+      FifoQueue: true
+  voucherHubOnNetworkHubActionQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "voucherHubOnNetworkHubActionQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt voucherHubOnNetworkHubActionDLQ.Arn
+        maxReceiveCount: 3
+  voucherHubOnNetworkHubActionSNSSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ServiceNetworkHubTopic
+      Endpoint: !GetAtt voucherHubOnNetworkHubActionQueue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - "HUB_CREATED"
+          - "HUB_UPDATED"
+          - "HUB_DELETED"
+          - "HUB_DEACTIVATED"
+      RawMessageDelivery: "true"
+      Region: !Sub us-east-1
+  voucherHubOnNetworkHubActionQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow SNS publish to SQS"
+            Effect: Allow
+            Principal:
+              Service: "sns.amazonaws.com"
+            Resource: !GetAtt voucherHubOnNetworkHubActionQueue.Arn
+            Action:
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHubTopic
+      Queues:
+        - Ref: voucherHubOnNetworkHubActionQueue
+
+Outputs:
+  voucherHubOnNetworkHubActionQueueArn:
+    Value: !GetAtt voucherHubOnNetworkHubActionQueue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-voucherHubOnNetworkHubActionQueue

@@ -1,0 +1,90 @@
+getRole:
+  permissionName: CAN_GET_SINGLE_ROLE
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/roles/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+listRoles:
+  permissionName: CAN_LIST_ROLES
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/roles
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+createRole:
+  permissionName: CAN_CREATE_ROLE
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/roles
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+updateRole:
+  permissionName: CAN_UPDATE_ROLE
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/roles/{id}
+        method: PUT
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+removeRole:
+  permissionName: CAN_DELETE_ROLE
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/roles/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live

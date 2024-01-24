@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "projects": {
+    "infra-shared": "apps/infra-shared",
+    "permissions": "infrastructure/sfsp-plugin",
+    "service-audit": "apps/service-audit",
+    "service-discount": "apps/service-discount",
+    "service-iam": "apps/service-iam",
+    "service-image-upload": "apps/service-image-upload",
+    "service-menu": "apps/service-menu",
+    "service-network": "apps/service-network",
+    "service-order": "apps/service-order",
+    "service-sdk": "libs/service-sdk",
+    "service-tenant": "apps/service-tenant",
+    "service-voucher": "apps/service-voucher",
+    "services": "tools/services",
+    "shared": "libs/shared"
+  }
+}

@@ -1,0 +1,112 @@
+menu:
+ - create:
+  - create menu-category ref
+	- create menu-subcategory ref
+	- create menu-item ref
+	- create menu object
+ 
+ - update:
+  - remove menu-category
+	- remove menu-subcategory ref
+	- remove menu-item ref
+	- create menu-category ref
+	- create menu-subcategory ref
+	- create menu-item ref
+	- recreate menu object
+
+ - delete:
+	- remove menu-category
+	- remove menu-subcategory ref
+	- remove menu-item ref
+	- remove menu object
+
+ - add-hotels
+  - create menu-hotel
+ 
+ - change-hotels
+  - remove existing menu-hotels
+	- add new menu-hotels
+
+item:
+ - create:
+  - create item for every subcategory that it belongs to
+	- create a single list-item (for representing in list)
+	- create a modifier-item
+	- save subcategories list in every item
+ 
+ - update-general-information:
+  - update all information across all item subcategories that it is replicated
+	- update one in item-list
+	- update item in menu
+ 
+ - update subcategories (transactional):
+  - get all items that are replicated
+	- get only information
+	- delete all existing ones
+	- construct new objects
+	- update subcategories list in every item
+	- insert new objects
+	- delete this item in existing subcategories in menus
+	- delete menu-item
+
+ - update modifiers (transactional):
+	- get all item-modifiers by item-id
+	- delete all existing ones
+	- construct new objects
+	- insert new objects
+	- replace the item inside the menu with new modifiers
+
+ - delete:
+  - delete menu-item
+	- delete item inside menu
+	- delete modifier item
+	- delete item-list item
+	- delete item in all subcategories
+
+
+modifier:
+ - create
+ - update (affects items that have the relation)
+  - update this modifier inside an item
+	- update this modifier inside an item in menu
+ - delete
+ - list
+
+subcategory:
+ - create:
+  - insert a subcategory object
+ - update-category-without-nonce:
+  - return relations with nonce key
+ - update-category-with-nonce:
+  - get all items with this subcategory
+	- delete all items with this subcategory
+	- do not delete list-item if has more than one subcategory (check inside subcategories object in each item)
+	- remove this subcategory inside every menu that has it
+	- remove menu-items that we have deleted
+	- remove menu-subcategory of this subcategory
+ - delete:
+  - remove all items with this subcategory
+	- remove all menu-items with this subcategory
+	- remove subcategory inside menu
+	- remove subcategory-menu relation
+	- remove item-menu relation
+
+category:
+ - create:
+  - insert a category object
+ - update
+ - delete
+  - remove menu-category
+	- remove this category inside every menu
+	- remove menu-subcategory
+	- remove menu-item
+	- update the menu without this category
+	- remove all items of this category
+	- remove all subcategories
+	- remove itself
+
+
+
+
+todo: 
+ - confirmation modal and nonce on update subcategory

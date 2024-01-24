@@ -1,0 +1,32 @@
+Resources:
+  ServiceNetworkCityTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_NETWORK_CITY_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceNetworkCityTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceNetworkCityTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceNetworkCityTopic
+
+Outputs:
+  ServiceNetworkCityTopicArn:
+    Value: !Ref ServiceNetworkCityTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceNetworkCityTopic

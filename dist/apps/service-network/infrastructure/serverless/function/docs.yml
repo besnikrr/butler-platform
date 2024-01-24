@@ -1,0 +1,7 @@
+getDocs:
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/docs/{proxy+}
+        method: GET

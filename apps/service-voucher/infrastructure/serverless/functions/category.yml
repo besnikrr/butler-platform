@@ -1,0 +1,12 @@
+getCategories:
+  permissionName: CAN_GET_VOUCHER_CATEGORIES
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/categories
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

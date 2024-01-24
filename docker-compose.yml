@@ -1,0 +1,44 @@
+version: '2.1'
+services:
+  redis:
+    image: redis
+    command: ['redis-server', '--appendonly', 'yes']
+    hostname: redis
+    volumes:
+      - platform-redis-data:/data
+    ports:
+      - '6379:6379'
+  dynamodb:
+    container_name: dynamodb
+    image: instructure/dynamo-local-admin
+    ports:
+      - '8000:8000'
+      - '8001:8001'
+    volumes:
+      - dynamodb-data:/data/
+    networks:
+      - 'local'
+  postgres:
+    container_name: postgres
+    image: postgres:14.1
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: platform
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/data/
+    networks:
+      - 'local'
+
+networks:
+  local:
+    driver: 'bridge'
+
+volumes:
+  dynamodb-data:
+    driver: local
+  platform-redis-data:
+    driver: local
+  postgres-data:
+    driver: local

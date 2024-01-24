@@ -1,0 +1,9 @@
+menuHubOnNetworkHubAction:
+  handler: main.menuHubOnNetworkHubAction
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - sqs:
+        arn: ${self:provider.environment.menuHubOnNetworkHubActionQueue}

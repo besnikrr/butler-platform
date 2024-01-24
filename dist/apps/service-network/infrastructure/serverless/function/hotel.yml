@@ -1,0 +1,143 @@
+getHotels:
+  permissionName: CAN_GET_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels
+        method: GET
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getHotel:
+  permissionName: CAN_GET_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: GET
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createHotel:
+  permissionName: CAN_CREATE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels
+        method: POST
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createHotelSF:
+  permissionName: CAN_CREATE_HOTEL_SF
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/create-hotel-sf
+        method: POST
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotel:
+  permissionName: CAN_UPDATE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelIntegrationConfigsShuttleApp:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_SHUTTLE_APP
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/integration_configs/shuttle_app
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelPaymentSettings:
+  permissionName: CAN_UPDATE_HOTEL_PAYMENTS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/payment_settings
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelIntegrationConfigsPms:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_PMS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/integration_configs/pms
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelIntegrationConfigsActivitiesApp:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_ACTIVITIES_APP
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/integration_configs/activities_app
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelIntegrationConfigsMenuApp:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_MENU_APP
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/integration_configs/menu_app
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+updateHotelIntegrationConfigsVouchersApp:
+  permissionName: CAN_UPDATE_HOTEL_INTEGRATION_CONFIGS_VOUCHERS_APP
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/integration_configs/vouchers_app
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+changeHotelStatus:
+  permissionName: CAN_CHANGE_HOTEL_STATUS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}/status
+        method: PATCH
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteHotel:
+  permissionName: CAN_DELETE_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: DELETE
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

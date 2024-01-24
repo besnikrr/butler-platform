@@ -1,0 +1,306 @@
+{
+  "root": "apps/service-discount",
+  "sourceRoot": "apps/service-discount",
+  "projectType": "application",
+  "targets": {
+    "base-build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/service-discount",
+        "main": "apps/service-discount/src/main.ts",
+        "tsConfig": "apps/service-discount/tsconfig.app.json",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/service-discount/environments/environment.ts",
+              "with": "apps/service-discount/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-discount:base-build::production",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-discount/infrastructure ./dist/apps/service-discount/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp -r ./apps/service-discount/db/migrations ./dist/apps/service-discount/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-discount/serverless.yml ./dist/apps/service-discount/",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "cp ./apps/service-discount/traits.yml ./dist/apps/service-discount/",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./",
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "sls deploy --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      },
+      "configurations": {
+        "function-only": {
+          "commands": [
+            {
+              "command": "npm install",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "sls deploy function --function {args.function} --stage={args.stage} --region={args.region} --force",
+              "forwardAllArgs": false
+            }
+          ]
+        }
+      }
+    },
+    "migrate-up-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function up --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "migrate-down-serverless": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls invoke --stage={args.stage} --region={args.region} --function down --data {}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "sls sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "migrate-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node migrate-seed --service service-discount",
+        "cwd": "./tools/services"
+      }
+    },
+    "base-serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "service-discount:base-build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "nx base-serve service-discount --port 9240",
+        "cwd": "./"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/service-discount/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/service-discount"],
+      "options": {
+        "jestConfig": "apps/service-discount/jest.config.js",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "python modifyXML.py {args.environment} {args.browser-type} {args.platform-url}",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "mvn clean test -DselectedTests=service-discount-{args.test-type}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "qa-e2e",
+        "parallel": false
+      }
+    },
+    "mikro-orm": {
+      "executor": "@alexy4744/nx-mikro-orm-cli:run",
+      "options": {
+        "config": {
+          "configPaths": ["./db/mikro-orm-config.ts"],
+          "tsConfigPath": "tsconfig.app.json",
+          "useTsNode": true
+        }
+      }
+    },
+    "pipeline-prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm install",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "pipeline-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run service-discount:pipeline-prepare",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pdwrapper deploy-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "pipeline-sfsp": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "pipeline-lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-lint --stage={args.stage} --traits-input-file ./apps/service-discount/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper run-test --stage={args.stage} --traits-input-file ./apps/service-discount/traits.yml",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-up-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "pipeline-rollback": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper rollback-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run service-discount:pipeline-sfsp --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    },
+    "pipeline-migrations-down": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "pdwrapper migrations-down-service --stage={args.stage} --region={args.region}",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "./dist/apps/service-discount",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
+

@@ -1,0 +1,23 @@
+[
+	{
+		"pk": "role",
+		"sk": "role::super_admin",
+		"name": "Main Tenants & Apps Reader",
+		"description": "Can view tenants and apps",
+		"permissions": [
+			"*",
+    		"permission::dashboard::CAN_GET_APPS"
+		],
+		"created_at": 1626131034245
+	},
+	{
+		"pk": "user",
+		"sk": "user::endrit@butlerhospitality.com",
+		"email": "dev@localhost",
+		"roles": [
+			"role::super_admin"
+		],
+		"display_name": "Dev User",
+		"created_at": 1626131034245
+	}
+  ]

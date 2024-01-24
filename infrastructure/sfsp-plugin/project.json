@@ -1,0 +1,44 @@
+{
+  "root": "infrastructure/sfsp-plugin",
+  "sourceRoot": "infrastructure/sfsp-plugin",
+  "projectType": "application",
+  "targets": {
+    "sync-dynamo": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "node sync-permissions-dynamo.js"
+          }
+        ],
+        "cwd": "infrastructure/sfsp-plugin/cli",
+        "parallel": false
+      }
+    },
+    "sync": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "node sync-permissions-sql.js"
+          }
+        ],
+        "cwd": "infrastructure/sfsp-plugin/cli",
+        "parallel": false
+      }
+    },
+    "parse-sf": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "node parse-stepfunctions.js"
+          }
+        ],
+        "cwd": "infrastructure/sfsp-plugin/cli",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

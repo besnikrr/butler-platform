@@ -1,0 +1,47 @@
+Resources:
+  itemOnSubcategoryUpdateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'itemOnSubcategoryUpdateDLQ.fifo'
+      FifoQueue: true
+  itemOnSubcategoryUpdateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: 'itemOnSubcategoryUpdateQueue.fifo'
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - itemOnSubcategoryUpdateDLQ
+            - Arn
+        maxReceiveCount: 3
+  itemOnSubcategoryUpdateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceMenuSubcategory
+      Endpoint:
+        Fn::GetAtt:
+          - itemOnSubcategoryUpdateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'SUBCATEGORY_UPDATED'
+      RawMessageDelivery: 'true'
+  itemOnSubcategoryUpdateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt itemOnSubcategoryUpdateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceMenuSubcategory
+      Queues:
+        - Ref: itemOnSubcategoryUpdateQueue

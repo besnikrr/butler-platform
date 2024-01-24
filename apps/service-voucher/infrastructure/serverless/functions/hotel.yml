@@ -1,0 +1,36 @@
+getProgramHotels:
+  permissionName: CAN_LIST_VOUCHER_PROGRAMS_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/program-hotels
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getProgramHotel:
+  permissionName: CAN_GET_SINGLE_HOTEL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getVoucherHotels:
+  permissionName: CAN_GET_VOUCHER_HOTELS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/hotels
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

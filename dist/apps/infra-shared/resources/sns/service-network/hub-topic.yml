@@ -1,0 +1,32 @@
+Resources:
+  ServiceNetworkHubTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: SERVICE_NETWORK_HUB_TOPIC-${self:provider.stage}.fifo
+      FifoTopic: true
+
+  ServiceNetworkHubTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "sns:Subscribe"
+              - "sns:Publish"
+            Resource:
+              Ref: ServiceNetworkHubTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: ${aws:accountId}
+      Topics:
+        - Ref: ServiceNetworkHubTopic
+
+Outputs:
+  ServiceNetworkHubTopicArn:
+    Value: !Ref ServiceNetworkHubTopic
+    Export:
+      Name: ${self:provider.stage}-ext-ServiceNetworkHubTopic

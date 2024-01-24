@@ -1,0 +1,1 @@
+{"version":3,"file":"passthrough.js","sourceRoot":"","sources":["../../../../../libs/service-sdk/authorizer/validators/passthrough.ts"],"names":[],"mappings":";;;AAAA,MAAM,UAAU,GAAG;IAClB,+BAA+B,EAAE,IAAI;IACrC,oCAAoC,EAAE,IAAI;CAC1C,CAAC;AACK,MAAM,QAAQ,GAAG,CACtB,GAAW,EACX,EAAE;IACF,OAAO,UAAU,CAAC,GAAG,CAAC,CAAC;AACzB,CAAC,CAAC;AAJW,QAAA,QAAQ,YAInB"}

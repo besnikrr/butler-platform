@@ -1,0 +1,16 @@
+name: order
+type: service
+
+deploy: false
+migrations: false
+sfsp: false
+test: false
+lint: false
+
+regions:
+  - us-east-1
+stages:
+  - sbx
+  - dev
+  - prod
+  - test

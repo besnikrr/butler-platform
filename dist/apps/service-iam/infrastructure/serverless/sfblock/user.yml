@@ -1,0 +1,65 @@
+validateUserInput:
+  handler: main.validateUserInput
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateUserDoesNotExist:
+  handler: main.validateUserDoesNotExist
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateRoles:
+  handler: main.validateRoles
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+saveUserInCognito:
+  handler: main.saveUserInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+saveUserInDynamo:
+  handler: main.saveUserInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateUserDoesNotExistInCognito:
+  handler: main.validateUserDoesNotExistInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+sendSuccessResponse:
+  handler: main.sendSuccessResponse
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateUpdateUserInput:
+  handler: main.validateUpdateUserInput
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateUserExists:
+  handler: main.validateUserExists
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+validateUserExistsInCognito:
+  handler: main.validateUserExistsInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+updateUserInDynamo:
+  handler: main.updateUserInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+deleteUserInCognito:
+  handler: main.deleteUserInCognito
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live
+deleteUserInDynamo:
+  handler: main.deleteUserInDynamo
+  deploymentSettings:
+    type: AllAtOnce #Linear10PercentEvery1Minute
+    alias: Live

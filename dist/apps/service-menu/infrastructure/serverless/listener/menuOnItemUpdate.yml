@@ -1,0 +1,9 @@
+menuOnItemUpdate:
+  handler: main.menuOnItemUpdate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - menuOnItemUpdateQueue
+            - Arn

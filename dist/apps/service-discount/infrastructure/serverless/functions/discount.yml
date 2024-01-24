@@ -1,0 +1,15 @@
+getDiscountByCode:
+  permissionName: CAN_GET_DISCOUNT_BY_CODE
+  handler: main.handler
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - http:
+        path: /${self:service}/discount/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

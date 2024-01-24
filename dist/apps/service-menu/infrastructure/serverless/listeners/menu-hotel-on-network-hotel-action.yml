@@ -1,0 +1,9 @@
+menuHotelOnNetworkHotelAction:
+  handler: main.menuHotelOnNetworkHotelAction
+  timeout: 30
+  warmup:
+    default:
+      enabled: true
+  events:
+    - sqs:
+        arn: ${self:provider.environment.menuHotelOnNetworkHotelActionQueue}

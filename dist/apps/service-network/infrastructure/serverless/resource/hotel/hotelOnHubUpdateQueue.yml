@@ -1,0 +1,47 @@
+Resources:
+  hotelOnHubUpdateDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hotelOnHubUpdateDLQ.fifo"
+      FifoQueue: true
+  hotelOnHubUpdateQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "hotelOnHubUpdateQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - hotelOnHubUpdateDLQ
+            - Arn
+        maxReceiveCount: 3
+  hotelOnHubUpdateSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHub
+      Endpoint:
+        Fn::GetAtt:
+          - hotelOnHubUpdateQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HUB_UPDATED'
+      RawMessageDelivery: 'true'
+  hotelOnHubUpdateQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt hotelOnHubUpdateQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHub
+      Queues:
+        - Ref: hotelOnHubUpdateQueue

@@ -1,0 +1,168 @@
+getPresignURL:
+  permissionName: CAN_GET_PRESIGNED_URL
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/upload/presign-url
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItem:
+  permissionName: CAN_GET_ITEM
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemRelations:
+  permissionName: CAN_GET_ITEM_RELATIONS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/relations/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemsBySubcategory:
+  permissionName: CAN_GET_ITEMS_BY_SUBCATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/subcategory/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItemsByCategory:
+  permissionName: CAN_GET_ITEMS_BY_CATEGORY
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/category/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createItem:
+  permissionName: CAN_CREATE_ITEM
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+patchItem:
+  permissionName: CAN_PATCH_ITEM
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/{id}
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getCategorizedItems:
+  permissionName: CAN_GET_CATEGORIZED_ITEMS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/category-subcategories/subcategories
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+deleteItem:
+  permissionName: CAN_DELETE_ITEM
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/{id}
+        method: DELETE
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItems:
+  permissionName: CAN_GET_ITEMS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+createItem86:
+  permissionName: CAN_CREATE_ITEM_86
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/item86
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getItem86:
+  permissionName: CAN_GET_ITEM_86
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/item86/{id}
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+getUpdateItem86:
+  permissionName: CAN_UPDATE_ITEM_86
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/item86/edit
+        method: PATCH
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}
+cronItem86:
+  permissionName: CAN_CRON_ITEM_86
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/items/item86/cron
+        method: POST
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

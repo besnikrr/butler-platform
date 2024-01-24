@@ -1,0 +1,47 @@
+Resources:
+  cityOnHubDeleteDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHubDeleteDLQ.fifo"
+      FifoQueue: true
+  cityOnHubDeleteQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "cityOnHubDeleteQueue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - cityOnHubDeleteDLQ
+            - Arn
+        maxReceiveCount: 3
+  cityOnHubDeleteSNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref ServiceNetworkHub
+      Endpoint:
+        Fn::GetAtt:
+          - cityOnHubDeleteQueue
+          - Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - 'HUB_DELETED'
+      RawMessageDelivery: 'true'
+  cityOnHubDeleteQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt cityOnHubDeleteQueue.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ServiceNetworkHub
+      Queues:
+        - Ref: cityOnHubDeleteQueue

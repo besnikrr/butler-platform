@@ -1,0 +1,3 @@
+deploymentSettings:
+  type: AllAtOnce #Linear10PercentEvery1Minute
+  alias: Live

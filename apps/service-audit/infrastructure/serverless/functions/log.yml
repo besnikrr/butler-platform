@@ -1,0 +1,14 @@
+log:
+  handler: main.log
+  timeout: 30
+  events:
+    # Lines commented below are only necessary when using the service locally
+    # - http:
+    #     path: /log
+    #     method: POST
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - PlatformAuditQueue
+            - Arn
+        batchSize: 10

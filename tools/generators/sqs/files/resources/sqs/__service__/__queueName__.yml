@@ -1,0 +1,50 @@
+Resources:
+  <%= name %>DLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "<%= name %>DLQ.fifo"
+      FifoQueue: true
+  <%= name %>Queue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: "<%= name %>Queue.fifo"
+      FifoQueue: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt <%= name %>DLQ.Arn
+        maxReceiveCount: 3
+  <%= name %>SNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      TopicArn: !Ref <%= topic %>
+      Endpoint: !GetAtt <%= name %>Queue.Arn
+      Protocol: sqs
+      FilterPolicy:
+        eventName:
+          - ''
+      RawMessageDelivery: 'true'
+      Region: !Sub <%= region %>
+  <%= name %>QueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt <%= name %>Queue.Arn
+            Action: 
+              - SQS:SendMessage
+              - SQS:SendMessageBatch
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref <%= topic %>
+      Queues:
+        - Ref: <%= name %>Queue
+
+Outputs:
+  <%= name %>QueueArn:
+    Value: !GetAtt <%= name %>Queue.Arn
+    Export:
+      Name: ${self:provider.stage}-ext-<%= name %>Queue

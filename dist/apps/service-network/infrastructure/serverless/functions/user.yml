@@ -1,0 +1,12 @@
+getUsers:
+  permissionName: CAN_GET_NETWORK_USERS
+  handler: main.handler
+  timeout: 30
+  events:
+    - http:
+        path: /${self:service}/users
+        method: GET
+        cors: true
+        authorizer:
+          type: CUSTOM
+          authorizerId: ${self:custom.secrets.api_tenants_authorizer_id}

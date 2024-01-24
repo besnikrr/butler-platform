@@ -1,0 +1,9 @@
+cityOnHotelCreate:
+  handler: main.cityOnHotelCreate
+  timeout: 30
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - cityOnHotelCreateQueue
+            - Arn
